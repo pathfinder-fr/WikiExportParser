@@ -4,3 +4,4 @@ Src/packages
 [oO]bj
 *.user
 *.suo
+build.log
