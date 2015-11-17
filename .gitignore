@@ -1,0 +1,6 @@
+Bin/
+Src/packages
+[bB]in
+[oO]bj
+*.user
+*.suo

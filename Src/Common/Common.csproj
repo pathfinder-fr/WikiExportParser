@@ -1,0 +1,133 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{E2110659-874B-4E76-AFCB-8FBD17FD7BF8}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>WikiExportParser</RootNamespace>
+    <AssemblyName>WikiExportParser.Common</AssemblyName>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="CsvHelper">
+      <HintPath>..\packages\CsvHelper.2.2.2\lib\net40-client\CsvHelper.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Commands\CommandLoader.cs" />
+    <Compile Include="Commands\GenerateFeatsCommand.cs" />
+    <Compile Include="Commands\GenerateMagicItemsCommand.cs" />
+    <Compile Include="Commands\GenerateMonstersCommand.cs" />
+    <Compile Include="Commands\GenerateSpellGlossaryCommand.cs" />
+    <Compile Include="Commands\GenerateSpellsCommand.cs" />
+    <Compile Include="Commands\ICommand.cs" />
+    <Compile Include="Commands\SpellCommandBase.cs" />
+    <Compile Include="DataSetCollection.cs" />
+    <Compile Include="ListExtensions.cs" />
+    <Compile Include="Logging\CombineLog.cs" />
+    <Compile Include="Logging\ConsoleLog.cs" />
+    <Compile Include="Logging\FileLog.cs" />
+    <Compile Include="EmbeddedResources.cs" />
+    <Compile Include="References.cs" />
+    <Compile Include="Wiki\CharacterAttributeUtil.cs" />
+    <Compile Include="Wiki\Parsing\ExceptionExtension.cs" />
+    <Compile Include="Wiki\Parsing\MonsterGlossaryParser.cs" />
+    <Compile Include="Wiki\Parsing\MonsterParser.cs" />
+    <Compile Include="Wiki\Parsing\SpellGlossaryParser.cs" />
+    <Compile Include="Wiki\Parsing\Spells\CastingTimeParser.cs" />
+    <Compile Include="Wiki\Parsing\Spells\LevelsParser.cs" />
+    <Compile Include="Wiki\Parsing\Spells\ComponentsParser.cs" />
+    <Compile Include="Wiki\Parsing\Spells\DescriptorParser.cs" />
+    <Compile Include="Wiki\Parsing\Spells\RangeParser.cs" />
+    <Compile Include="Wiki\Parsing\Spells\SavingThrowParser.cs" />
+    <Compile Include="Wiki\Parsing\Spells\SchoolParser.cs" />
+    <Compile Include="PrdUtils.cs" />
+    <Compile Include="Wiki\Parsing\Spells\TargetParser.cs" />
+    <Compile Include="Wiki\StringExtensions.cs" />
+    <Compile Include="Wiki\Parsing\FeatParser.cs" />
+    <Compile Include="Wiki\Parsing\FeatParser.PrerequisiteParser.cs" />
+    <Compile Include="Wiki\Parsing\MagicItemParser.cs" />
+    <Compile Include="DictionaryExtensions.cs" />
+    <Compile Include="ILog.cs" />
+    <Compile Include="Logging\NullLog.cs" />
+    <Compile Include="ParseException.cs" />
+    <Compile Include="Wiki\WikiExport.cs" />
+    <Compile Include="Wiki\MarkupUtil.cs" />
+    <Compile Include="Wiki\WikiPage.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Wiki\WikiName.cs" />
+    <Compile Include="Wiki\WikiPageCollection.cs" />
+    <Compile Include="Wiki\Parsing\SpellListParser.cs" />
+    <Compile Include="Wiki\Parsing\SpellParser.cs" />
+    <Compile Include="Wiki\XmlWikiPage.cs" />
+    <Compile Include="Writers\CsvDataSetWriter.cs" />
+    <Compile Include="Writers\EnumerableExtensions.cs" />
+    <Compile Include="Writers\IDataSetWriter.cs" />
+    <Compile Include="Writers\JsonDataSetWriter.cs" />
+    <Compile Include="Writers\XmlDataSetWriter.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\FeatPrerequisiteOtherTypes.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Wiki\Parsing\Spells\MagicResistanceParser.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\SpellNoRangeList.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\SpellNoComponentList.txt" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <ItemGroup>
+    <ProjectReference Include="..\..\ext\dataset\Src\Schema\Schema.csproj">
+      <Project>{BD23C9F2-EBFC-43EA-99B4-08E958F72658}</Project>
+      <Name>Schema</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Wiki\Parsing\Monsters\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\MonsterIgnoredPages.txt" />
+  </ItemGroup>
+</Project>

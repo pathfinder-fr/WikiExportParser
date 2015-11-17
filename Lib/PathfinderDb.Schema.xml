@@ -1,0 +1,393 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>PathfinderDb.Schema</name>
+    </assembly>
+    <members>
+        <member name="F:PathfinderDb.Schema.Alignments.None">
+            <summary>
+            None.
+            </summary>
+        </member>
+        <member name="F:PathfinderDb.Schema.Alignments.LawfulGood">
+            <summary>
+            Lawful Good.
+            </summary>
+        </member>
+        <member name="F:PathfinderDb.Schema.Alignments.LawfulNeutral">
+            <summary>
+            Lawful Neutral.
+            </summary>
+        </member>
+        <member name="F:PathfinderDb.Schema.Alignments.LawfulEvil">
+            <summary>
+            Lawful Evil.
+            </summary>
+        </member>
+        <member name="F:PathfinderDb.Schema.Alignments.NeutralGood">
+            <summary>
+            Neutral Good.
+            </summary>
+        </member>
+        <member name="F:PathfinderDb.Schema.Alignments.NeutralStrict">
+            <summary>
+            Neutral Strict.
+            </summary>
+        </member>
+        <member name="F:PathfinderDb.Schema.Alignments.NeutralEvil">
+            <summary>
+            Neutral Evil.
+            </summary>
+        </member>
+        <member name="F:PathfinderDb.Schema.Alignments.ChaoticGood">
+            <summary>
+            Chaotic Good.
+            </summary>
+        </member>
+        <member name="F:PathfinderDb.Schema.Alignments.ChaoticNeutral">
+            <summary>
+            Chaotic Neutral.
+            </summary>
+        </member>
+        <member name="F:PathfinderDb.Schema.Alignments.ChaoticEvil">
+            <summary>
+            Chaotic Evil.
+            </summary>
+        </member>
+        <member name="F:PathfinderDb.Schema.Alignments.Lawful">
+            <summary>
+            Lawful.
+            </summary>
+        </member>
+        <member name="F:PathfinderDb.Schema.Alignments.Chaotic">
+            <summary>
+            Chaotic.
+            </summary>
+        </member>
+        <member name="F:PathfinderDb.Schema.Alignments.Neutral">
+            <summary>
+            Neutral.
+            </summary>
+        </member>
+        <member name="F:PathfinderDb.Schema.Alignments.Good">
+            <summary>
+            Good.
+            </summary>
+        </member>
+        <member name="F:PathfinderDb.Schema.Alignments.Evil">
+            <summary>
+            Evil.
+            </summary>
+        </member>
+        <member name="F:PathfinderDb.Schema.Alignments.All">
+            <summary>
+            All
+            </summary>
+        </member>
+        <member name="P:PathfinderDb.Schema.DataSet.Sources">
+            <summary>
+            Gets or sets all sources used in this dataset.
+            </summary>
+        </member>
+        <member name="P:PathfinderDb.Schema.Feat.Id">
+            <summary>
+            Gets or sets the unique id of this feat.
+            </summary>
+        </member>
+        <member name="P:PathfinderDb.Schema.Feat.Name">
+            <summary>
+            Gets or sets the name of this feat.
+            </summary>
+        </member>
+        <member name="P:PathfinderDb.Schema.Feat.Types">
+            <summary>
+            Gets or sets the types of the feat.
+            </summary>
+        </member>
+        <member name="P:PathfinderDb.Schema.Feat.Prerequisites">
+            <summary>
+            Gets or sets all prerequisites for this feat.
+            </summary>
+        </member>
+        <member name="P:PathfinderDb.Schema.ElementSource.Id">
+            <summary>
+            Gets or set the id of the source this item comes from.
+            </summary>
+        </member>
+        <member name="M:PathfinderDb.Schema.MoneyAmount.#ctor">
+            <summary>
+            Initializes a new instance of <see cref="T:PathfinderDb.Schema.MoneyAmount"/>.
+            </summary>
+        </member>
+        <member name="T:PathfinderDb.Schema.Monster">
+            <summary>
+            Represents a monster.
+            </summary>
+        </member>
+        <member name="P:PathfinderDb.Schema.Monster.Id">
+            <summary>
+            Gets or sets the unique id of this monster.
+            </summary>
+        </member>
+        <member name="P:PathfinderDb.Schema.Monster.Name">
+            <summary>
+            Gets or sets the name of this monster.
+            </summary>
+        </member>
+        <member name="P:PathfinderDb.Schema.Monster.CR">
+            <summary>
+            Gets or sets the combat rank value.
+            </summary>
+        </member>
+        <member name="T:PathfinderDb.Schema.Source">
+            <summary>
+            Represents a product source, such as an official book (player's guide, bestiary) or a web product.
+            </summary>
+        </member>
+        <member name="P:PathfinderDb.Schema.Source.Id">
+            <summary>
+            Gets or sets the unique id for this product source.
+            It can be one of the values of <see cref="T:PathfinderDb.Schema.Source.Ids"/> or any custom string.
+            It should be culture insensitive (all pathfinder rpg rulebook are referenced using the "pfrpg" id, ignoring the language used).
+            </summary>
+        </member>
+        <member name="P:PathfinderDb.Schema.Source.Name">
+            <summary>
+            Gets or sets the display name for this product source.
+            </summary>
+        </member>
+        <member name="P:PathfinderDb.Schema.Source.Url">
+            <summary>
+            Gets or sets the unique url for this product.
+            </summary>
+        </member>
+        <member name="P:PathfinderDb.Schema.Source.UrlString">
+            <summary>
+            Gets or sets the unique url for this product, in a text format.
+            </summary>
+        </member>
+        <member name="T:PathfinderDb.Schema.Source.Ids">
+            <summary>
+            Contains most officials ids.
+            </summary>
+        </member>
+        <member name="F:PathfinderDb.Schema.Source.Ids.PathfinderRpg">
+            <summary>
+            Source id for pathfinder rpg rules.
+            </summary>
+        </member>
+        <member name="F:PathfinderDb.Schema.Source.Ids.Bestiary">
+            <summary>
+            Source id for bestiary.
+            </summary>
+        </member>
+        <member name="F:PathfinderDb.Schema.Source.Ids.Bestiary2">
+            <summary>
+            Source id for bestiary 2.
+            </summary>
+        </member>
+        <member name="F:PathfinderDb.Schema.Source.Ids.Bestiary3">
+            <summary>
+            Source id for bestiary 3.
+            </summary>
+        </member>
+        <member name="F:PathfinderDb.Schema.Source.Ids.Bestiary4">
+            <summary>
+            Source id for bestiary 4.
+            </summary>
+        </member>
+        <member name="F:PathfinderDb.Schema.Source.Ids.AdvancedPlayerGuide">
+            <summary>
+            Source id for pathfinder advanced player guide.
+            </summary>
+        </member>
+        <member name="F:PathfinderDb.Schema.Source.Ids.AdvancedRaceGuide">
+            <summary>
+            Source id for pathfinder advanced race guide.
+            </summary>
+        </member>
+        <member name="F:PathfinderDb.Schema.Source.Ids.UltimateCombat">
+            <summary>
+            Source id for pathfinder ultimate combat.
+            </summary>
+        </member>
+        <member name="F:PathfinderDb.Schema.Source.Ids.UltimateMagic">
+            <summary>
+            Source id for pathfinder ultimate magic.
+            </summary>
+        </member>
+        <member name="F:PathfinderDb.Schema.Source.Ids.UltimateEquipment">
+            <summary>
+            Source id for pathfinder ultimate equipment.
+            </summary>
+        </member>
+        <member name="F:PathfinderDb.Schema.Source.Ids.GameMasteryGuide">
+            <summary>
+            Source id for pathfinder game mastery guide.
+            </summary>
+        </member>
+        <member name="F:PathfinderDb.Schema.Source.Ids.UltimateCampaign">
+            <summary>
+            Source id for pathfinder ultimate compaign.
+            </summary>
+        </member>
+        <member name="F:PathfinderDb.Schema.Source.Ids.MythicAdventures">
+            <summary>
+            Source id for pathfinder mythic adventures.
+            </summary>
+        </member>
+        <member name="F:PathfinderDb.Schema.Source.Ids.NpcCodex">
+            <summary>
+            Source id for pathfinder NPC codex.
+            </summary>
+        </member>
+        <member name="F:PathfinderDb.Schema.Source.Ids.PaizoBlog">
+            <summary>
+            Source id for the paizo blog.
+            </summary>
+        </member>
+        <member name="T:PathfinderDb.Schema.SpecialBoolean">
+            <summary>
+            Specifies a boolean which contains a third value named 'special' and used to describe specific conditions.
+            </summary>
+        </member>
+        <member name="P:PathfinderDb.Schema.Spell.Id">
+            <summary>
+            Gets or sets the unique id of this spell.
+            It's often generated using its title, replacing spaces by '-' and removing any extra character.
+            </summary>
+        </member>
+        <member name="P:PathfinderDb.Schema.Spell.Name">
+            <summary>
+            Gets or sets the title (name) of this spell.
+            </summary>
+        </member>
+        <member name="F:PathfinderDb.Schema.SpellDescriptors.Shadow">
+            <remarks>
+            Added in Ultimate Magic.
+            </remarks>
+        </member>
+        <member name="F:PathfinderDb.Schema.SpellDescriptors.Curse">
+            <remarks>
+            Added in Ultimate Magic.
+            </remarks>
+        </member>
+        <member name="F:PathfinderDb.Schema.SpellDescriptors.Disease">
+            <remarks>
+            Added in Ultimate Magic.
+            </remarks>
+        </member>
+        <member name="F:PathfinderDb.Schema.SpellDescriptors.Emotion">
+            <remarks>
+            Added in Ultimate Magic.
+            </remarks>
+        </member>
+        <member name="F:PathfinderDb.Schema.SpellDescriptors.Pain">
+            <remarks>
+            Added in Ultimate Magic.
+            </remarks>
+        </member>
+        <member name="F:PathfinderDb.Schema.SpellDescriptors.Poison">
+            <remarks>
+            Added in Ultimate Magic.
+            </remarks>
+        </member>
+        <member name="T:PathfinderDb.Schema.SpellSchool">
+            <summary>
+            Specifies all spell schools known in pathfinder rpg.
+            </summary>
+        </member>
+        <member name="T:PathfinderDb.Schema.SpellTarget">
+            <summary>
+            Describe a target for a spell.
+            </summary>
+        </member>
+        <member name="P:PathfinderDb.Schema.SpellTarget.Value">
+            <summary>
+            Gets or sets the value describing the target.
+            </summary>
+        </member>
+        <member name="T:PathfinderDb.Schema.TimeUnit">
+            <summary>
+            Specifies the units of time which can be used to describe a timed element.
+            </summary>
+        </member>
+        <member name="F:PathfinderDb.Schema.TimeUnit.Special">
+            <summary>
+            The unit of time can not be described using a unit of time.
+            It can be a conditional value, or a range.
+            </summary>
+        </member>
+        <member name="F:PathfinderDb.Schema.TimeUnit.SimpleAction">
+            <summary>
+            A simple action, as described in pathfinder combat rules.
+            </summary>
+        </member>
+        <member name="F:PathfinderDb.Schema.TimeUnit.ImmediateAction">
+            <summary>
+            An immediate action, as described in pathfinder combat rules.
+            </summary>
+        </member>
+        <member name="F:PathfinderDb.Schema.TimeUnit.SwiftAction">
+            <summary>
+            A swift action, as described in pathfinder combat rules.
+            </summary>
+        </member>
+        <member name="F:PathfinderDb.Schema.TimeUnit.FullRoundAction">
+            <summary>
+            A full round action, as described in pathfinder combat rules.
+            </summary>
+        </member>
+        <member name="F:PathfinderDb.Schema.TimeUnit.Round">
+            <summary>
+            One or more rounds.
+            A round is a unit of time in pathfinder rpg consisting of six seconds.
+            </summary>
+        </member>
+        <member name="F:PathfinderDb.Schema.TimeUnit.Minute">
+            <summary>
+            One or more minutes.
+            </summary>
+        </member>
+        <member name="F:PathfinderDb.Schema.TimeUnit.Hour">
+            <summary>
+            One or more hours.
+            </summary>
+        </member>
+        <member name="F:PathfinderDb.Schema.TimeUnit.Day">
+            <summary>
+            One or more days.
+            </summary>
+        </member>
+        <member name="T:PathfinderDb.Schema.WeightAmount">
+            <summary>
+            Describes a weight, using a value and a unit.
+            </summary>
+        </member>
+        <member name="P:PathfinderDb.Schema.WeightAmount.Unit">
+            <summary>
+            Gets or sets the unit used to describe the weight.
+            </summary>
+        </member>
+        <member name="P:PathfinderDb.Schema.WeightAmount.Value">
+            <summary>
+            Gets or sets the value sued to describe the weight.
+            </summary>
+        </member>
+        <member name="T:PathfinderDb.Schema.WeightUnit">
+            <summary>
+            Specifies the unit used to describe a weight.
+            </summary>
+        </member>
+        <member name="F:PathfinderDb.Schema.WeightUnit.Pounds">
+            <summary>
+            Pounds.
+            </summary>
+        </member>
+        <member name="F:PathfinderDb.Schema.WeightUnit.Kilogram">
+            <summary>
+            Kilograms.
+            </summary>
+        </member>
+    </members>
+</doc>

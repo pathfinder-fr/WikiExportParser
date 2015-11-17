@@ -1,0 +1,11 @@
+﻿# sorts du manuel des races, sans liste
+benedictionKarmique
+espaceSacre
+nuageDeToile
+passageSansTrace
+projectileDeToile
+protectionContreLaMortVivance
+rayonAveuglant
+regressionAncestrale
+verite
+voileDuParadis
