@@ -15,4 +15,4 @@ goto build
 :build
 set targets=Build
 if not "%~1" == "" set targets=%~1
-"%msbuildpath%msbuild.exe" /t:%targets% build.proj /fl /flp:logfile=build.log
+"%msbuildpath%msbuild.exe" /t:%targets% build\build.proj /fl /flp:logfile=build.log

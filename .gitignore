@@ -1,7 +1,8 @@
-Bin/
-Src/packages
+artifacts/
+packages/
 [bB]in
 [oO]bj
 *.user
 *.suo
 build.log
+.vs/
