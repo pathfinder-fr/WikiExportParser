@@ -1,16 +1,17 @@
-﻿//-----------------------------------------------------------------------
-// <copyright file="WikiPage.cs" company="mB3M">
-// Copyright (c) mB3M. Tous droits reserves.
+﻿// -----------------------------------------------------------------------
+// <copyright file="WikiPage.cs" organization="Pathfinder-Fr">
+// Copyright (c) Pathfinder-fr. Tous droits reserves.
 // </copyright>
-//-----------------------------------------------------------------------
+// -----------------------------------------------------------------------
+
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Net;
 
 namespace WikiExportParser.Wiki
 {
-    using System;
-    using System.Collections.Generic;
-    using System.IO;
-    using System.Linq;
-
     public class WikiPage
     {
         private readonly XmlWikiPage source;
@@ -27,13 +28,16 @@ namespace WikiExportParser.Wiki
         {
             this.wiki = wiki;
             this.source = source;
-            this.displayName = source.Title;
-            this.wikiName = WikiName.FromString(source.FullName);
+            displayName = source.Title;
+            wikiName = WikiName.FromString(source.FullName);
 
-            this.Url = string.Format("http://www.pathfinder-fr.org/Wiki/Pathfinder-RPG.{0}.ashx", this.Name);
+            Url = string.Format("http://www.pathfinder-fr.org/Wiki/Pathfinder-RPG.{0}.ashx", Name);
         }
 
-        public string Title { get { return this.source.Title; } }
+        public string Title
+        {
+            get { return source.Title; }
+        }
 
         public List<WikiName> Categories
         {
@@ -42,33 +46,27 @@ namespace WikiExportParser.Wiki
 
         public DateTime LastModified
         {
-            get { return this.source.LastModified; }
+            get { return source.LastModified; }
         }
 
         public int Version
         {
-            get { return this.source.Version; }
+            get { return source.Version; }
         }
 
         public IEnumerable<WikiPage> InLinks
         {
-            get
-            {
-                return this.source.InLinksNames.Select(c => this.wiki.Pages.GetOrEmpty(c)).Where(c => c != null);
-            }
+            get { return source.InLinksNames.Select(c => wiki.Pages.GetOrEmpty(c)).Where(c => c != null); }
         }
 
         public IEnumerable<WikiPage> OutLinks
         {
-            get
-            {
-                return this.source.OutLinksNames.Select(c => this.wiki.Pages.GetOrEmpty(c)).Where(c => c != null);
-            }
+            get { return source.OutLinksNames.Select(c => wiki.Pages.GetOrEmpty(c)).Where(c => c != null); }
         }
 
         public string FileName
         {
-            get { return this.source.FileName; }
+            get { return source.FileName; }
         }
 
         /// <summary>
@@ -76,22 +74,22 @@ namespace WikiExportParser.Wiki
         /// </summary>
         public string Body
         {
-            get { return this.source.Body; }
+            get { return source.Body; }
         }
 
         public string Raw
         {
-            get { return this.source.Raw ?? string.Empty; }
+            get { return source.Raw ?? string.Empty; }
         }
 
         public string FullName
         {
-            get { return this.source.FullName; }
+            get { return source.FullName; }
         }
 
         public WikiName WikiName
         {
-            get { return this.wikiName; }
+            get { return wikiName; }
         }
 
         public string Name
@@ -100,15 +98,15 @@ namespace WikiExportParser.Wiki
             {
                 if (name == null)
                 {
-                    var i = this.FullName.IndexOf('.');
+                    var i = FullName.IndexOf('.');
 
                     if (i != -1)
-                        name = this.FullName.Substring(i + 1);
+                        name = FullName.Substring(i + 1);
                     else
-                        name = this.FullName;
+                        name = FullName;
                 }
 
-                return this.name;
+                return name;
             }
         }
 
@@ -116,41 +114,35 @@ namespace WikiExportParser.Wiki
         {
             get
             {
-                if (this.displayName == null)
-                    this.displayName = Path.GetFileNameWithoutExtension(this.FileName) ?? string.Empty;
+                if (displayName == null)
+                    displayName = Path.GetFileNameWithoutExtension(FileName) ?? string.Empty;
 
-                return this.displayName;
+                return displayName;
             }
         }
 
         public string Id
         {
-            get
-            {
-                return this.WikiName.Id;
-            }
+            get { return WikiName.Id; }
         }
 
         public string HtmlBody
         {
-            get { return System.Net.WebUtility.HtmlDecode(this.Body).Replace("<br />", "<br />\r\n"); }
+            get { return WebUtility.HtmlDecode(Body).Replace("<br />", "<br />\r\n"); }
         }
 
         public string Url { get; private set; }
 
         public bool IsRedirection(out WikiName target)
         {
-            var raw = this.Raw.Trim();
+            var raw = Raw.Trim();
             if (raw.StartsWith(">>> "))
             {
                 target = WikiName.FromString(raw.Substring(4));
                 return true;
             }
-            else
-            {
-                target = null;
-                return false;
-            }
+            target = null;
+            return false;
         }
     }
 }

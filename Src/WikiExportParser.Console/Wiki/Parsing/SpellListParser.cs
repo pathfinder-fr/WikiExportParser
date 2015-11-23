@@ -1,11 +1,18 @@
-﻿namespace WikiExportParser.Wiki.Parsing
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text.RegularExpressions;
-    using PathfinderDb.Schema;
+﻿// -----------------------------------------------------------------------
+// <copyright file="SpellListParser.cs" organization="Pathfinder-Fr">
+// Copyright (c) Pathfinder-fr. Tous droits reserves.
+// </copyright>
+// -----------------------------------------------------------------------
 
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text.RegularExpressions;
+using PathfinderDb.Schema;
+using WikiExportParser.Logging;
+
+namespace WikiExportParser.Wiki.Parsing
+{
     internal class SpellListParser
     {
         private const string LevelHeaderPattern = "^===(Sorts|Formules).*(niveau (?<Level>\\d+)|de (?<Level>\\d+)(er|e) niveau)( \\((tours de magie|oraisons)\\))?===$";
@@ -25,7 +32,7 @@
         public SpellListParser(WikiExport wiki, ILog log)
         {
             this.wiki = wiki;
-            this.log = log ?? Logging.NullLog.Instance;
+            this.log = log ?? NullLog.Instance;
         }
 
         public void Parse(WikiPage page, string listName, List<Spell> spells)
@@ -37,9 +44,9 @@
 
             var wiki = this.page.Raw;
 
-            var lines = wiki.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+            var lines = wiki.Split(new[] {'\r', '\n'}, StringSplitOptions.RemoveEmptyEntries);
 
-            this.currentLevel = -1;
+            currentLevel = -1;
 
             foreach (var line in lines)
             {
@@ -60,7 +67,7 @@
                 }
                 else
                 {
-                    this.currentLevel = int.Parse(match.Groups["Level"].Value);
+                    currentLevel = int.Parse(match.Groups["Level"].Value);
                     //log.Information("Détection du début d'une liste de sort de niveau {0}", this.currentLevel);
                 }
                 return;
@@ -92,7 +99,6 @@
             var spellPageId = wikiName.Id;
 
 
-
             // On cherche un sort dans la librairie dont l'id correspond à l'id de la page désignée
             var spell = spells.FirstOrDefault(s => s.Id == spellPageId);
 
@@ -100,7 +106,7 @@
             {
                 // On a pas trouvé de sort correspond à l'id désigné par le lien wiki
                 // On vérifie si la page existe
-                var page = this.wiki.FindPage(wikiName);
+                var page = wiki.FindPage(wikiName);
 
                 if (page == null)
                 {
@@ -115,23 +121,23 @@
                 return;
             }
 
-            var list = spell.Levels.FirstOrDefault(l => l.List == this.listName);
+            var list = spell.Levels.FirstOrDefault(l => l.List == listName);
 
-            if (this.listName == SpellList.Ids.Cleric && !spell.Levels.Any(l => l.List == SpellList.Ids.Oracle))
+            if (listName == SpellList.Ids.Cleric && !spell.Levels.Any(l => l.List == SpellList.Ids.Oracle))
             {
-                spell.Levels = spell.Levels.Concat(new[] { new SpellListLevel { List = SpellList.Ids.Oracle, Level = this.currentLevel } }).ToArray();
+                spell.Levels = spell.Levels.Concat(new[] {new SpellListLevel {List = SpellList.Ids.Oracle, Level = currentLevel}}).ToArray();
             }
 
             if (list == null)
             {
                 //log.Information("Ajout du sort {0} à la liste {1} {2}", spell.Name, this.listName, this.currentLevel);
-                spell.Levels = spell.Levels.Concat(new[] { new SpellListLevel { List = this.listName, Level = this.currentLevel } }).ToArray();
+                spell.Levels = spell.Levels.Concat(new[] {new SpellListLevel {List = listName, Level = currentLevel}}).ToArray();
             }
             else
             {
-                if (list.Level != this.currentLevel)
+                if (list.Level != currentLevel)
                 {
-                    log.Error("Erreur de niveau pour le sort \"{0}\" (liste niv. {1} et description niv. {2})", spell.Name, this.currentLevel, list.Level);
+                    log.Error("Erreur de niveau pour le sort \"{0}\" (liste niv. {1} et description niv. {2})", spell.Name, currentLevel, list.Level);
                 }
             }
         }

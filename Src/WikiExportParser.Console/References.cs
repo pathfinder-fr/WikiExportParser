@@ -1,8 +1,14 @@
-﻿namespace WikiExportParser
-{
-    using PathfinderDb.Schema;
-    using System;
+﻿// -----------------------------------------------------------------------
+// <copyright file="References.cs" organization="Pathfinder-Fr">
+// Copyright (c) Pathfinder-fr. Tous droits reserves.
+// </copyright>
+// -----------------------------------------------------------------------
 
+using System;
+using PathfinderDb.Schema;
+
+namespace WikiExportParser
+{
     internal static class References
     {
         public const string PathfinderFrWiki = "Wiki Pathfinder-fr.org";
@@ -33,10 +39,14 @@
         {
             switch (sourceId)
             {
-                case Source.Ids.Bestiary: return "Bestiaire";
-                case Source.Ids.Bestiary2: return "Bestiaire 2";
-                case Source.Ids.Bestiary3: return "Bestiaire 3";
-                default: return null;
+                case Source.Ids.Bestiary:
+                    return "Bestiaire";
+                case Source.Ids.Bestiary2:
+                    return "Bestiaire 2";
+                case Source.Ids.Bestiary3:
+                    return "Bestiaire 3";
+                default:
+                    return null;
             }
         }
 
@@ -44,10 +54,14 @@
         {
             switch (sourceId)
             {
-                case Source.Ids.Bestiary: return "978-2-915847-88-8";
-                case Source.Ids.Bestiary2: return "978-2-36328-103-6";
-                case Source.Ids.Bestiary3: return "978-2-36328-001-5";
-                default: return null;
+                case Source.Ids.Bestiary:
+                    return "978-2-915847-88-8";
+                case Source.Ids.Bestiary2:
+                    return "978-2-36328-103-6";
+                case Source.Ids.Bestiary3:
+                    return "978-2-36328-001-5";
+                default:
+                    return null;
             }
         }
 
@@ -80,7 +94,7 @@
             var drpLink = string.Format("http://www.regles-pathfinder.fr/{0}.html", new string(drpPageName));
             return new ElementReference
             {
-                Name = References.BbeDrp,
+                Name = BbeDrp,
                 Href = new Uri(drpLink)
             };
         }

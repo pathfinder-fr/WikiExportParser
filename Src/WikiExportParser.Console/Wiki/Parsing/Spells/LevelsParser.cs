@@ -1,10 +1,16 @@
-﻿namespace WikiExportParser.Wiki.Parsing.Spells
-{
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text.RegularExpressions;
-    using PathfinderDb.Schema;
+﻿// -----------------------------------------------------------------------
+// <copyright file="LevelsParser.cs" organization="Pathfinder-Fr">
+// Copyright (c) Pathfinder-fr. Tous droits reserves.
+// </copyright>
+// -----------------------------------------------------------------------
 
+using System.Collections.Generic;
+using System.Linq;
+using System.Text.RegularExpressions;
+using PathfinderDb.Schema;
+
+namespace WikiExportParser.Wiki.Parsing.Spells
+{
     internal static class LevelsParser
     {
         private const string ClassPattern = @"\[\[{0}(\|{1})?\]\] (?<Level>\d+)";
@@ -56,7 +62,7 @@
             {
                 if (!levels.Any(l => l.List == id))
                 {
-                    levels.Add(new SpellListLevel { List = id, Level = int.Parse(match.Groups["Level"].Value) });
+                    levels.Add(new SpellListLevel {List = id, Level = int.Parse(match.Groups["Level"].Value)});
                 }
                 return true;
             }

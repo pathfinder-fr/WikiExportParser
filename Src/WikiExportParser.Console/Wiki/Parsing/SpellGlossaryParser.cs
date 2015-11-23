@@ -1,10 +1,17 @@
-﻿namespace WikiExportParser.Wiki.Parsing
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Text.RegularExpressions;
-    using PathfinderDb.Schema;
+﻿// -----------------------------------------------------------------------
+// <copyright file="SpellGlossaryParser.cs" organization="Pathfinder-Fr">
+// Copyright (c) Pathfinder-fr. Tous droits reserves.
+// </copyright>
+// -----------------------------------------------------------------------
 
+using System;
+using System.Collections.Generic;
+using System.Text.RegularExpressions;
+using PathfinderDb.Schema;
+using WikiExportParser.Logging;
+
+namespace WikiExportParser.Wiki.Parsing
+{
     internal class SpellGlossaryParser
     {
         private const string Pattern = @"\|\sclass=""gauche""\s\|\s(?<En>[^\[\r\n]+)(\s*\[\[(?<Prd>[^\r\n\]]+)\]\])?\r?\n\|\sclass=""gauche""\s\|\s(?<Fr>[^\[\r\n]+)";
@@ -16,7 +23,7 @@
         public SpellGlossaryParser(WikiExport wiki, ILog log)
         {
             this.wiki = wiki;
-            this.log = log ?? Logging.NullLog.Instance;
+            this.log = log ?? NullLog.Instance;
         }
 
         public void Parse(WikiPage glossaryPage, List<Spell> spells)
@@ -36,7 +43,7 @@
                 {
                     En = match.Groups["En"].Value.Trim(),
                     Fr = match.Groups["Fr"].Value.Replace('’', '\'').Trim(),
-                    PrdLink = prdLink,
+                    PrdLink = prdLink
                 };
 
                 if (value.En != "?")
@@ -44,7 +51,7 @@
                     SpellGlossaryValue existingEn;
                     if (dict.TryGetValue(value.Fr, out existingEn))
                     {
-                        this.log.Warning("Le sort {0} est présent plusieurs fois dans le glossaire : {1} et {2}", value.Fr, existingEn.En, value.En);
+                        log.Warning("Le sort {0} est présent plusieurs fois dans le glossaire : {1} et {2}", value.Fr, existingEn.En, value.En);
                     }
                     else
                     {
@@ -68,7 +75,7 @@
                     if (!string.IsNullOrEmpty(value.PrdLink))
                     {
                         // Ajout lien PRD
-                        spell.Source.References.Add(new ElementReference { HrefString = value.PrdLink, Name = References.PaizoPrd, Lang = DataSetLanguages.English });
+                        spell.Source.References.Add(new ElementReference {HrefString = value.PrdLink, Name = References.PaizoPrd, Lang = DataSetLanguages.English});
                     }
 
                     // Suppression du dictionnaire pour contrôle
@@ -77,13 +84,13 @@
                 else
                 {
                     // Sort non présent dans le glossaire
-                    this.log.Information("Le sort {0} ({1} {2}) n'est pas présent dans le glossaire anglais/français.", spell.Name, spell.Id, spell.Source.Id);
+                    log.Information("Le sort {0} ({1} {2}) n'est pas présent dans le glossaire anglais/français.", spell.Name, spell.Id, spell.Source.Id);
                 }
             }
 
             foreach (var pair in dict)
             {
-                this.log.Warning("Le sort {0} ({1}) du glossaire n'a pas été utilisé", pair.Value.Fr, pair.Key);
+                log.Warning("Le sort {0} ({1}) du glossaire n'a pas été utilisé", pair.Value.Fr, pair.Key);
             }
         }
 

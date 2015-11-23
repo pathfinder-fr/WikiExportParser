@@ -4,14 +4,14 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text.RegularExpressions;
+using PathfinderDb.Schema;
+
 namespace WikiExportParser.Wiki.Parsing.Spells
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text.RegularExpressions;
-    using PathfinderDb.Schema;
-
     internal static class DescriptionParser
     {
         private static readonly List<string> noListSpells;
@@ -20,7 +20,7 @@ namespace WikiExportParser.Wiki.Parsing.Spells
 
         static DescriptionParser()
         {
-            noListSpells = EmbeddedResources.LoadString("Resources.SpellNoList.txt").Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries).ToList();
+            noListSpells = EmbeddedResources.LoadString("Resources.SpellNoList.txt").Split(new[] {Environment.NewLine}, StringSplitOptions.RemoveEmptyEntries).ToList();
         }
 
         public static void ParseDescriptions(IEnumerable<Spell> spells, IEnumerable<WikiPage> pages, IDictionary<string, string> descriptions, ILog log)

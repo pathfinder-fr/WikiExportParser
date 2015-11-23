@@ -1,9 +1,15 @@
-﻿namespace WikiExportParser.Wiki.Parsing.Spells
-{
-    using System.Linq;
-    using System.Text.RegularExpressions;
-    using PathfinderDb.Schema;
+﻿// -----------------------------------------------------------------------
+// <copyright file="DescriptorParser.cs" organization="Pathfinder-Fr">
+// Copyright (c) Pathfinder-fr. Tous droits reserves.
+// </copyright>
+// -----------------------------------------------------------------------
 
+using System.Linq;
+using System.Text.RegularExpressions;
+using PathfinderDb.Schema;
+
+namespace WikiExportParser.Wiki.Parsing.Spells
+{
     internal static class DescriptorParser
     {
         private const string DescriptorPattern = @"\(\[\[registre\|(?<Title>[^\]]+)\]\]\)";

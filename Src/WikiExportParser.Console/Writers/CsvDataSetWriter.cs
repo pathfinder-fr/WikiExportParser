@@ -1,31 +1,35 @@
-﻿namespace WikiExportParser.Writers
-{
-    using CsvHelper;
-    using CsvHelper.Configuration;
-    using PathfinderDb.Schema;
-    using System;
-    using System.Collections.Generic;
-    using System.Globalization;
-    using System.IO;
-    using System.Linq;
-    using System.Text;
+﻿// -----------------------------------------------------------------------
+// <copyright file="CsvDataSetWriter.cs" organization="Pathfinder-Fr">
+// Copyright (c) Pathfinder-fr. Tous droits reserves.
+// </copyright>
+// -----------------------------------------------------------------------
 
+using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Text;
+using CsvHelper;
+using CsvHelper.Configuration;
+using PathfinderDb.Schema;
+
+namespace WikiExportParser.Writers
+{
     public class CsvDataSetWriter : IDataSetWriter
     {
         private readonly CsvConfiguration config;
 
         public CsvDataSetWriter()
         {
-            this.config = new CsvConfiguration
+            config = new CsvConfiguration
             {
-                CultureInfo = CultureInfo.InvariantCulture,
+                CultureInfo = CultureInfo.InvariantCulture
             };
         }
 
         public bool Accept(string name, DataSet dataSet, Dictionary<string, string> options)
         {
             return options.ContainsKey("csv");
-
         }
 
         public void Write(string name, DataSet dataSet, string directory)
@@ -38,17 +42,17 @@
 
             if (dataSet.Spells != null && dataSet.Spells.Count != 0)
             {
-                this.WriteSpellDataSet(Path.Combine(folder, "spells.csv"), dataSet);
+                WriteSpellDataSet(Path.Combine(folder, "spells.csv"), dataSet);
             }
 
             if (dataSet.Feats != null && dataSet.Feats.Count != 0)
             {
-                this.WriteFeatDataSet(Path.Combine(folder, "feats.csv"), dataSet);
+                WriteFeatDataSet(Path.Combine(folder, "feats.csv"), dataSet);
             }
 
             if (dataSet.Monsters != null && dataSet.Monsters.Count != 0)
             {
-                this.WriteMonsterDataSet(Path.Combine(folder, "monsters.csv"), dataSet);
+                WriteMonsterDataSet(Path.Combine(folder, "monsters.csv"), dataSet);
             }
         }
 
@@ -107,88 +111,142 @@
 
             public string Id
             {
-                get { return this.spell.Id; }
+                get { return spell.Id; }
             }
 
             public string Name
             {
-                get { return this.spell.Name; }
+                get { return spell.Name; }
             }
 
             public string English
             {
                 get
                 {
-                    if (this.spell.Localization == null)
+                    if (spell.Localization == null)
                         return null;
-                    return this.spell.Localization.GetLocalizedEntry("en-US", "name", null);
+                    return spell.Localization.GetLocalizedEntry("en-US", "name", null);
                 }
             }
 
             public string Source
             {
-                get { return this.spell.Source.Id; }
+                get { return spell.Source.Id; }
             }
 
             public string Descriptor
             {
-                get { return this.spell.Descriptor.ToString(); }
+                get { return spell.Descriptor.ToString(); }
             }
 
             public string School
             {
-                get { return this.spell.School.ToString(); }
+                get { return spell.School.ToString(); }
             }
 
-            public string Alchemist { get { return this.FindLevel("alchemist"); } }
+            public string Alchemist
+            {
+                get { return FindLevel("alchemist"); }
+            }
 
-            public string AntiPaladin { get { return this.FindLevel("antipaladin"); } }
+            public string AntiPaladin
+            {
+                get { return FindLevel("antipaladin"); }
+            }
 
-            public string Bard { get { return this.FindLevel("bard"); } }
+            public string Bard
+            {
+                get { return FindLevel("bard"); }
+            }
 
-            public string Cleric { get { return this.FindLevel("cleric"); } }
+            public string Cleric
+            {
+                get { return FindLevel("cleric"); }
+            }
 
-            public string Druid { get { return this.FindLevel("druid"); } }
+            public string Druid
+            {
+                get { return FindLevel("druid"); }
+            }
 
-            public string Inquisitor { get { return this.FindLevel("inquisitor"); } }
+            public string Inquisitor
+            {
+                get { return FindLevel("inquisitor"); }
+            }
 
-            public string Summoner { get { return this.FindLevel("summoner"); } }
+            public string Summoner
+            {
+                get { return FindLevel("summoner"); }
+            }
 
-            public string Magus { get { return this.FindLevel("magus"); } }
+            public string Magus
+            {
+                get { return FindLevel("magus"); }
+            }
 
-            public string Oracle { get { return this.FindLevel("orache"); } }
+            public string Oracle
+            {
+                get { return FindLevel("orache"); }
+            }
 
-            public string Paladin { get { return this.FindLevel("paladin"); } }
+            public string Paladin
+            {
+                get { return FindLevel("paladin"); }
+            }
 
-            public string Ranger { get { return this.FindLevel("ranger"); } }
+            public string Ranger
+            {
+                get { return FindLevel("ranger"); }
+            }
 
-            public string Witch { get { return this.FindLevel("witch"); } }
+            public string Witch
+            {
+                get { return FindLevel("witch"); }
+            }
 
-            public string Wizard { get { return this.FindLevel("sorcerer-wizard"); } }
+            public string Wizard
+            {
+                get { return FindLevel("sorcerer-wizard"); }
+            }
 
-            public string Components { get { return this.spell.Components == null ? (string)null : this.spell.Components.Kinds.ToString(); } }
+            public string Components
+            {
+                get { return spell.Components == null ? null : spell.Components.Kinds.ToString(); }
+            }
 
-            public string Range { get { return this.spell.Range == null ? (string)null : this.spell.Range.ToString(); } }
+            public string Range
+            {
+                get { return spell.Range == null ? null : spell.Range.ToString(); }
+            }
 
-            public string Target { get { return this.spell.Target == null ? (string)null : this.spell.Target.Value; } }
+            public string Target
+            {
+                get { return spell.Target == null ? null : spell.Target.Value; }
+            }
 
-            public string CastingTime { get { return this.spell.CastingTime.ToString(); } }
+            public string CastingTime
+            {
+                get { return spell.CastingTime.ToString(); }
+            }
 
-            public string Summary { get { return this.spell.Summary; } }
+            public string Summary
+            {
+                get { return spell.Summary; }
+            }
 
             public string FrUrl
             {
-                get { return this.spell.Source.References.FirstOrDefaultSelect(r => r.Name == "Wiki Pathfinder-fr.org", x => x.HrefString); }
+                get { return spell.Source.References.FirstOrDefaultSelect(r => r.Name == "Wiki Pathfinder-fr.org", x => x.HrefString); }
             }
 
             public string EnUrl
             {
-                get { return this.spell.Source.References.FirstOrDefaultSelect(r => r.Name == "Paizo PRD", x => x.HrefString); }
+                get { return spell.Source.References.FirstOrDefaultSelect(r => r.Name == "Paizo PRD", x => x.HrefString); }
             }
 
             private string FindLevel(string list)
             {
-                return this.spell.Levels.FirstOrDefaultSelect(l => l.List == list, x => x.Level.ToString());
+                return spell.Levels.FirstOrDefaultSelect(l => l.List == list, x => x.Level.ToString());
             }
         }
 
@@ -203,22 +261,22 @@
 
             public string Id
             {
-                get { return this.feat.Id; }
+                get { return feat.Id; }
             }
 
             public string Name
             {
-                get { return this.feat.Name; }
+                get { return feat.Name; }
             }
 
             public string Source
             {
-                get { return this.feat.Source.Id; }
+                get { return feat.Source.Id; }
             }
 
             public string Types
             {
-                get { return string.Join(", ", this.feat.Types); }
+                get { return string.Join(", ", feat.Types); }
             }
         }
 
@@ -233,42 +291,42 @@
 
             public string Id
             {
-                get { return this.monster.Id; }
+                get { return monster.Id; }
             }
 
             public string Name
             {
-                get { return this.monster.Name; }
+                get { return monster.Name; }
             }
 
             public string Source
             {
-                get { return this.monster.Source.Id; }
+                get { return monster.Source.Id; }
             }
 
             public string Type
             {
-                get { return this.monster.Type.ToString(); }
+                get { return monster.Type.ToString(); }
             }
 
             public string Climate
             {
-                get { return this.monster.Climate.ToString(); }
+                get { return monster.Climate.ToString(); }
             }
 
             public string Environment
             {
-                get { return this.monster.Environment.ToString(); }
+                get { return monster.Environment.ToString(); }
             }
 
             public decimal CR
             {
-                get { return this.monster.CR; }
+                get { return monster.CR; }
             }
 
             public string English
             {
-                get { return this.monster.OpenLocalization().GetLocalizedEntry(DataSetLanguages.English, "name", string.Empty); }
+                get { return monster.OpenLocalization().GetLocalizedEntry(DataSetLanguages.English, "name", string.Empty); }
             }
         }
     }

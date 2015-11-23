@@ -4,15 +4,15 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
+using System.Text.RegularExpressions;
+using PathfinderDb.Schema;
+
 namespace WikiExportParser.Wiki.Parsing
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Globalization;
-    using System.Linq;
-    using System.Text.RegularExpressions;
-    using PathfinderDb.Schema;
-
     public class MonsterParser
     {
         private static readonly Regex bdStart = new Regex(@"^<div class=""BD"">\s*$", RegexOptions.Multiline | RegexOptions.CultureInvariant | RegexOptions.IgnoreCase);
@@ -44,14 +44,14 @@ namespace WikiExportParser.Wiki.Parsing
 
         public List<Monster> ParseAll(WikiPage page, string raw)
         {
-            this.sources = null;
+            sources = null;
             this.page = page;
-            this.i = 0;
+            i = 0;
 
             var result = new List<Monster>();
 
             Match nextBdStart;
-            while ((nextBdStart = bdStart.Match(raw, this.i)).Success)
+            while ((nextBdStart = bdStart.Match(raw, i)).Success)
             {
                 Match end = bdEnd.Match(raw, nextBdStart.Index);
 
@@ -65,7 +65,7 @@ namespace WikiExportParser.Wiki.Parsing
 
                 try
                 {
-                    var monster = this.Parse(page, rawBloc);
+                    var monster = Parse(page, rawBloc);
                     if (monster != null)
                     {
                         result.Add(monster);
@@ -76,7 +76,7 @@ namespace WikiExportParser.Wiki.Parsing
                     throw new ParseException(string.Format("Impossible de décoder le bloc {0}", result.Count + 1), ex);
                 }
 
-                this.i = end.Index;
+                i = end.Index;
             }
 
             return result;
@@ -84,23 +84,23 @@ namespace WikiExportParser.Wiki.Parsing
 
         private Monster Parse(WikiPage page, string rawBloc)
         {
-            this.sources = null;
+            sources = null;
             this.page = page;
 
             var monster = new Monster();
 
-            var blocSources = this.ParseSources(rawBloc);
-            if (blocSources != null && this.sources == null)
+            var blocSources = ParseSources(rawBloc);
+            if (blocSources != null && sources == null)
             {
-                this.sources = blocSources;
+                sources = blocSources;
             }
 
-            if (!this.ParseNameAndCR(rawBloc, monster))
+            if (!ParseNameAndCR(rawBloc, monster))
             {
                 return null;
             }
 
-            if (!this.ParsePuce(rawBloc, monster))
+            if (!ParsePuce(rawBloc, monster))
                 return null;
 
             if (blocSources != null)
@@ -193,13 +193,13 @@ namespace WikiExportParser.Wiki.Parsing
 
             if (!match.Success)
             {
-                this.Warning("Impossible de détecter la balise pucem");
+                Warning("Impossible de détecter la balise pucem");
                 return true;
             }
 
-            monster.Type = this.ParseType(match.Groups["type"].Value);
-            monster.Environment = this.ParseEnvironment(match.Groups["environment"].Value);
-            monster.Climate = this.ParseClimate(match.Groups["climate"].Value);
+            monster.Type = ParseType(match.Groups["type"].Value);
+            monster.Environment = ParseEnvironment(match.Groups["environment"].Value);
+            monster.Climate = ParseClimate(match.Groups["climate"].Value);
 
             return true;
         }
@@ -237,7 +237,7 @@ namespace WikiExportParser.Wiki.Parsing
                 case "":
                     return CreatureType.Other;
                 default:
-                    this.Warning("Valeur puce type inconnue : '{0}'", type);
+                    Warning("Valeur puce type inconnue : '{0}'", type);
                     return CreatureType.Other;
             }
         }
@@ -271,7 +271,7 @@ namespace WikiExportParser.Wiki.Parsing
                 case "":
                     return CreatureEnvironment.Unknown;
                 default:
-                    this.Warning("Valeur puce environnement inconnue : '{0}'", environment);
+                    Warning("Valeur puce environnement inconnue : '{0}'", environment);
                     return CreatureEnvironment.Unknown;
             }
         }
@@ -291,7 +291,7 @@ namespace WikiExportParser.Wiki.Parsing
                 case "":
                     return CreatureClimate.Other;
                 default:
-                    this.Warning("Valeur puce climat inconnue : '{0}'", climate);
+                    Warning("Valeur puce climat inconnue : '{0}'", climate);
                     return CreatureClimate.Other;
             }
         }
@@ -306,21 +306,21 @@ namespace WikiExportParser.Wiki.Parsing
 
                 if (isPlural)
                 {
-                    return value.Split(new[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries).Select(this.ParseSource).Where(s => s != null).ToArray();
+                    return value.Split(new[] {',', ';'}, StringSplitOptions.RemoveEmptyEntries).Select(ParseSource).Where(s => s != null).ToArray();
                 }
 
-                var source = this.ParseSource(value);
+                var source = ParseSource(value);
 
                 if (source != null)
                 {
-                    return new[] { source };
+                    return new[] {source};
                 }
 
                 return null;
             }
-            if (this.sources != null)
+            if (sources != null)
             {
-                return this.sources;
+                return sources;
             }
 
             return null;
@@ -339,16 +339,16 @@ namespace WikiExportParser.Wiki.Parsing
 
             if (match.Success)
             {
-                var source = this.ParseSourceId(match.Groups["Name"].Value);
+                var source = ParseSourceId(match.Groups["Name"].Value);
                 return source;
             }
-            var rawSrc = this.ParseSourceId(value, false);
+            var rawSrc = ParseSourceId(value, false);
             if (rawSrc != null)
             {
                 return rawSrc;
             }
 
-            this.Warning("Impossible de lire la source \"{0}\"", value);
+            Warning("Impossible de lire la source \"{0}\"", value);
             return null;
         }
 
@@ -357,17 +357,17 @@ namespace WikiExportParser.Wiki.Parsing
             switch (name.ToLowerInvariant())
             {
                 case "bestiaire":
-                    return new ElementSource { Id = Source.Ids.Bestiary };
+                    return new ElementSource {Id = Source.Ids.Bestiary};
                 case "bestiaire 2":
-                    return new ElementSource { Id = Source.Ids.Bestiary2 };
+                    return new ElementSource {Id = Source.Ids.Bestiary2};
                 case "bestiaire 3":
-                    return new ElementSource { Id = Source.Ids.Bestiary3 };
+                    return new ElementSource {Id = Source.Ids.Bestiary3};
                 case "art de la magie":
-                    return new ElementSource { Id = Source.Ids.UltimateMagic };
+                    return new ElementSource {Id = Source.Ids.UltimateMagic};
                 default:
                     if (logWarning)
                     {
-                        this.Warning("Source inconnue : {0}", name);
+                        Warning("Source inconnue : {0}", name);
                     }
                     return null;
             }
@@ -375,7 +375,7 @@ namespace WikiExportParser.Wiki.Parsing
 
         private void Warning(string format, params object[] args)
         {
-            this.log.Warning("Page \"{0}\" (id {1}): {2}", this.page.Title, this.page.Id, string.Format(format, args));
+            log.Warning("Page \"{0}\" (id {1}): {2}", page.Title, page.Id, string.Format(format, args));
         }
     }
 }

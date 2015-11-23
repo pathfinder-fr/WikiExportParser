@@ -1,4 +1,10 @@
-﻿using System;
+﻿// -----------------------------------------------------------------------
+// <copyright file="TargetParser.cs" organization="Pathfinder-Fr">
+// Copyright (c) Pathfinder-fr. Tous droits reserves.
+// </copyright>
+// -----------------------------------------------------------------------
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -21,14 +27,11 @@ namespace WikiExportParser.Wiki.Parsing.Spells
                 //log.Information("{0}: Pas de cible", spell.Name);
                 return;
             }
-            else
-            {
-                var type = match.Groups["Type"].Value;
-                int count;
-                typeCount.TryGetValue(type, out count);
-                count++;
-                typeCount[type] = count;
-            }
+            var type = match.Groups["Type"].Value;
+            int count;
+            typeCount.TryGetValue(type, out count);
+            count++;
+            typeCount[type] = count;
 
             var value = MarkupUtil.RemoveMarkup(match.Groups["Value"].Value.Trim());
 

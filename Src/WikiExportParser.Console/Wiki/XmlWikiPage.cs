@@ -1,12 +1,18 @@
-﻿namespace WikiExportParser.Wiki
-{
-    using System;
-    using System.Collections.Generic;
-    using System.ComponentModel;
-    using System.Globalization;
-    using System.Linq;
-    using System.Xml.Serialization;
+﻿// -----------------------------------------------------------------------
+// <copyright file="XmlWikiPage.cs" organization="Pathfinder-Fr">
+// Copyright (c) Pathfinder-fr. Tous droits reserves.
+// </copyright>
+// -----------------------------------------------------------------------
 
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Globalization;
+using System.Linq;
+using System.Xml.Serialization;
+
+namespace WikiExportParser.Wiki
+{
     [XmlType("wikiPage")]
     [XmlRoot("wikiPage")]
     public class XmlWikiPage
@@ -20,15 +26,15 @@
 
         public IEnumerable<WikiName> CategoriesNames
         {
-            get { return this.Categories.Select(c => WikiName.FromString(c)); }
+            get { return Categories.Select(c => WikiName.FromString(c)); }
         }
 
         [XmlElement("lastModified")]
         [EditorBrowsable(EditorBrowsableState.Never)]
         public string LastModifiedText
         {
-            get { return this.LastModified.ToString("u"); }
-            set { this.LastModified = DateTime.ParseExact(value, "u", CultureInfo.InvariantCulture); }
+            get { return LastModified.ToString("u"); }
+            set { LastModified = DateTime.ParseExact(value, "u", CultureInfo.InvariantCulture); }
         }
 
         [XmlIgnore]
@@ -43,7 +49,7 @@
 
         public IEnumerable<WikiName> InLinksNames
         {
-            get { return this.InLinks.Select(l => WikiName.FromString(l)); }
+            get { return InLinks.Select(l => WikiName.FromString(l)); }
         }
 
         [XmlArray("outLinks")]
@@ -52,7 +58,7 @@
 
         public IEnumerable<WikiName> OutLinksNames
         {
-            get { return this.OutLinks.Select(l => WikiName.FromString(l)); }
+            get { return OutLinks.Select(l => WikiName.FromString(l)); }
         }
 
         [XmlIgnore]

@@ -4,12 +4,12 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
+using System;
+using System.Collections.Generic;
+using PathfinderDb.Schema;
+
 namespace WikiExportParser
 {
-    using System;
-    using System.Collections.Generic;
-    using PathfinderDb.Schema;
-
     /// <summary>
     /// Collection de <see cref="DataSet" /> rangés selon leur source.
     /// </summary>
@@ -22,7 +22,7 @@ namespace WikiExportParser
         /// </summary>
         public IDictionary<string, DataSet> DataSets
         {
-            get { return this.items; }
+            get { return items; }
         }
 
         /// <summary>
@@ -37,17 +37,17 @@ namespace WikiExportParser
         {
             DataSet dataSet;
 
-            if (!this.items.TryGetValue(name, out dataSet))
+            if (!items.TryGetValue(name, out dataSet))
             {
                 dataSet = new DataSet();
-                if (!string.IsNullOrEmpty(this.Lang))
+                if (!string.IsNullOrEmpty(Lang))
                 {
-                    dataSet.Lang = this.Lang;
+                    dataSet.Lang = Lang;
                 }
 
                 dataSet.Sources = new List<Source>();
                 //dataSet.Sources.Add(new Source { Id = name });
-                this.items.Add(name, dataSet);
+                items.Add(name, dataSet);
             }
 
             return dataSet;

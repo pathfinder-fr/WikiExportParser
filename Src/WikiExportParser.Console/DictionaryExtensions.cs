@@ -1,7 +1,13 @@
-﻿namespace WikiExportParser
-{
-    using System.Collections.Generic;
+﻿// -----------------------------------------------------------------------
+// <copyright file="DictionaryExtensions.cs" organization="Pathfinder-Fr">
+// Copyright (c) Pathfinder-fr. Tous droits reserves.
+// </copyright>
+// -----------------------------------------------------------------------
 
+using System.Collections.Generic;
+
+namespace WikiExportParser
+{
     internal static class DictionaryExtensions
     {
         public static void Increment<TKey>(this IDictionary<TKey, int> @this, TKey key)

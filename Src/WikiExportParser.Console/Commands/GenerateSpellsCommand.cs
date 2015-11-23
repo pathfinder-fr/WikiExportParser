@@ -1,8 +1,14 @@
-﻿namespace WikiExportParser.Commands
-{
-    using PathfinderDb.Schema;
-    using System.Linq;
+﻿// -----------------------------------------------------------------------
+// <copyright file="GenerateSpellsCommand.cs" organization="Pathfinder-Fr">
+// Copyright (c) Pathfinder-fr. Tous droits reserves.
+// </copyright>
+// -----------------------------------------------------------------------
 
+using System.Linq;
+using PathfinderDb.Schema;
+
+namespace WikiExportParser.Commands
+{
     public class GenerateSpellsCommand : SpellCommandBase, ICommand
     {
         public string Alias
@@ -17,17 +23,17 @@
 
         public void Execute(DataSetCollection dataSets)
         {
-            var spells = this.ReadSpells();
+            var spells = ReadSpells();
 
-            this.AddSpellLists(spells);
+            AddSpellLists(spells);
 
-            this.GenerateIds(spells);
+            GenerateIds(spells);
 
             // Adding to dataset
             foreach (var sourceSpells in spells.GroupBy(s => s.Source.Id).Where(s => !string.IsNullOrEmpty(s.Key)))
             {
                 var dataSet = dataSets.ResolveDataSet(sourceSpells.Key);
-                dataSet.Sources.GetOrAdd(s => s.Id.Equals(sourceSpells.Key), () => new Source { Id = sourceSpells.Key });
+                dataSet.Sources.GetOrAdd(s => s.Id.Equals(sourceSpells.Key), () => new Source {Id = sourceSpells.Key});
                 dataSet.Spells.AddRange(sourceSpells);
             }
 

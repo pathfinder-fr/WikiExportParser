@@ -1,4 +1,10 @@
-﻿namespace WikiExportParser
+﻿// -----------------------------------------------------------------------
+// <copyright file="ILog.cs" organization="Pathfinder-Fr">
+// Copyright (c) Pathfinder-fr. Tous droits reserves.
+// </copyright>
+// -----------------------------------------------------------------------
+
+namespace WikiExportParser
 {
     public interface ILog
     {

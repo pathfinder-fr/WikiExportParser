@@ -1,12 +1,15 @@
-﻿namespace WikiExportParser.Wiki.Parsing.Spells
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Text.RegularExpressions;
-    using PathfinderDb.Schema;
+﻿// -----------------------------------------------------------------------
+// <copyright file="SavingThrowParser.cs" organization="Pathfinder-Fr">
+// Copyright (c) Pathfinder-fr. Tous droits reserves.
+// </copyright>
+// -----------------------------------------------------------------------
 
+using System;
+using System.Text.RegularExpressions;
+using PathfinderDb.Schema;
+
+namespace WikiExportParser.Wiki.Parsing.Spells
+{
     internal static class SavingThrowParser
     {
         private const string Pattern = @"'''Jet de sauvegarde'''(?<Value>[^;]+);";
@@ -35,7 +38,7 @@
             var compareValue = value.ToLowerInvariant();
 
             var savingThrow = new SpellSavingThrow();
-            
+
             var copyValue = false;
 
             if (compareValue.IndexOf(" ou ", StringComparison.Ordinal) != -1 ||
@@ -48,7 +51,6 @@
             }
             else if ((match = Regex.Match(compareValue, EffectPattern, RegexOptions.CultureInvariant | RegexOptions.ExplicitCapture)).Success)
             {
-
                 switch (match.Groups["Type"].Value)
                 {
                     case "volonté":
@@ -72,7 +74,6 @@
                         savingThrow.Target = SpellSavingThrowTarget.None;
                         copyValue = true;
                         break;
-
                 }
 
                 var effect = match.Groups["Value"].Value.Trim();

@@ -4,13 +4,13 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
+using System;
+using System.Linq;
+using System.Text.RegularExpressions;
+using PathfinderDb.Schema;
+
 namespace WikiExportParser.Wiki.Parsing.Spells
 {
-    using System;
-    using System.Linq;
-    using System.Text.RegularExpressions;
-    using PathfinderDb.Schema;
-
     internal static class MagicResistanceParser
     {
         private const string RemoveMarkupPattern = @"\[\[présentation des sorts#(jetsdesauvegarde|rm)\|(inoffensif)\]\]";

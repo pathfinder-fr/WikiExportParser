@@ -1,11 +1,19 @@
-﻿namespace WikiExportParser.Wiki.Parsing
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text.RegularExpressions;
-    using PathfinderDb.Schema;
+﻿// -----------------------------------------------------------------------
+// <copyright file="FeatParser.cs" organization="Pathfinder-Fr">
+// Copyright (c) Pathfinder-fr. Tous droits reserves.
+// </copyright>
+// -----------------------------------------------------------------------
 
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Text.RegularExpressions;
+using PathfinderDb.Schema;
+using WikiExportParser.Logging;
+
+namespace WikiExportParser.Wiki.Parsing
+{
     internal partial class FeatParser
     {
         private const string TypePattern = "'''Catégorie[\\.]?''' (: )?";
@@ -52,37 +60,37 @@
 
         public void Execute(ILog log = null)
         {
-            this.log = log ?? Logging.NullLog.Instance;
+            this.log = log ?? NullLog.Instance;
 
-            this.lines = this.wikiPage.Raw.Trim().Split('\n').Select(l => l.Trim()).ToArray();
+            lines = wikiPage.Raw.Trim().Split('\n').Select(l => l.Trim()).ToArray();
 
             if (lines.Length == 0)
             {
                 throw new ParseException("Aucune ligne de texte détectées");
             }
 
-            this.feat.Name = this.wikiPage.Title;
-            this.feat.Id = this.wikiPage.Id;
-            this.feat.Source.References.Add(new ElementReference { Name = "Wiki Pathfinder-fr.org", Href = new Uri(this.wikiPage.Url) });
+            feat.Name = wikiPage.Title;
+            feat.Id = wikiPage.Id;
+            feat.Source.References.Add(new ElementReference {Name = "Wiki Pathfinder-fr.org", Href = new Uri(wikiPage.Url)});
 
-            this.ParseSource();
-            this.ParseDescription();
-            this.ParseType();
-            this.ParsePrerequisites();
-            this.ParseBenefit();
+            ParseSource();
+            ParseDescription();
+            ParseType();
+            ParsePrerequisites();
+            ParseBenefit();
         }
 
         private void ParseSource()
         {
-            var sourceId = MarkupUtil.DetectSourceSnippet(this.lines[0]);
+            var sourceId = MarkupUtil.DetectSourceSnippet(lines[0]);
 
             if (sourceId == null)
             {
-                if (this.wikiPage.Categories.Any(c => c.Name == "Bestiaire"))
+                if (wikiPage.Categories.Any(c => c.Name == "Bestiaire"))
                 {
                     sourceId = Source.Ids.Bestiary;
                 }
-                else if (this.wikiPage.Categories.Any(c => c.Name == "Bestiaire 2"))
+                else if (wikiPage.Categories.Any(c => c.Name == "Bestiaire 2"))
                 {
                     sourceId = Source.Ids.Bestiary2;
                 }
@@ -93,7 +101,7 @@
                 sourceId = Source.Ids.PathfinderRpg;
             }
 
-            this.feat.Source.Id = sourceId;
+            feat.Source.Id = sourceId;
         }
 
         private void ParseDescription()
@@ -102,7 +110,7 @@
             string line;
             do
             {
-                line = this.lines[i];
+                line = lines[i];
                 i++;
                 if (line.Length != 0 && line[0] == '{')
                 {
@@ -115,24 +123,23 @@
                         line = line.Substring(line.IndexOf('}') + 1);
                     }
                 }
-            }
-            while (line == string.Empty);
+            } while (line == string.Empty);
 
             if (!line.StartsWith("''") || !line.EndsWith("''"))
             {
                 throw new ParseException("La première ligne n'est pas en italique");
             }
 
-            this.feat.Description = line.Substring(2, line.Length - 4);
+            feat.Description = line.Substring(2, line.Length - 4);
         }
 
         private void ParseType()
         {
-            var categoryLine = this.lines.FirstOrDefault(l => Regex.Match(l, TypePattern, RegexOptions.CultureInvariant | RegexOptions.Multiline).Success);
+            var categoryLine = lines.FirstOrDefault(l => Regex.Match(l, TypePattern, RegexOptions.CultureInvariant | RegexOptions.Multiline).Success);
 
             if (categoryLine == null)
             {
-                this.feat.Types = new[] { FeatType.General };
+                feat.Types = new[] {FeatType.General};
                 return;
             }
 
@@ -202,7 +209,7 @@
                 }
             }
 
-            this.feat.Types = types.ToArray();
+            feat.Types = types.ToArray();
         }
 
         private void ParsePrerequisites()
@@ -237,29 +244,28 @@
 
             conditions = conditions.Select(c => c.Trim());
 
-            var preferequisiteParser = new PrerequisiteParser(this.wikiPage, this.log);
+            var preferequisiteParser = new PrerequisiteParser(wikiPage, log);
 
-            this.feat.Prerequisites = conditions.Select(c => preferequisiteParser.Parse(c, this.export, hasSemiColons)).Where(p => p != null).ToArray();
-
+            feat.Prerequisites = conditions.Select(c => preferequisiteParser.Parse(c, export, hasSemiColons)).Where(p => p != null).ToArray();
         }
 
         private void ParseBenefit()
         {
-            var benefit = this.ParseParagraph("'''Avantage.'''", "'''Avantages.'''");
+            var benefit = ParseParagraph("'''Avantage.'''", "'''Avantages.'''");
 
             if (benefit == null)
             {
-                this.log.Warning("{0}: Avantage introuvable", this.wikiPage.Title);
+                log.Warning("{0}: Avantage introuvable", wikiPage.Title);
             }
 
-            this.feat.Benefit = benefit;
+            feat.Benefit = benefit;
         }
 
         private string ParseHtmlParagraph(params string[] prefix)
         {
-            var html = System.Net.WebUtility.HtmlDecode(this.wikiPage.Body);
+            var html = WebUtility.HtmlDecode(wikiPage.Body);
 
-            var htmlLines = html.Split(new[] { "<br/>", "<br>", "<br />" }, StringSplitOptions.None);
+            var htmlLines = html.Split(new[] {"<br/>", "<br>", "<br />"}, StringSplitOptions.None);
 
             var lines = new List<string>();
             var inside = false;
@@ -301,9 +307,9 @@
         {
             int firstLine = -1;
             int lastLine = -1;
-            for (int i = 0; i < this.lines.Length; i++)
+            for (int i = 0; i < lines.Length; i++)
             {
-                var line = this.lines[i];
+                var line = lines[i];
                 if (prefix.Any(p => line.StartsWith(p, StringComparison.OrdinalIgnoreCase)))
                 {
                     firstLine = i;

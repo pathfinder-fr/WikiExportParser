@@ -1,10 +1,15 @@
-﻿namespace WikiExportParser.Commands
-{
-    using PathfinderDb.Schema;
-    using System;
-    using System.Linq;
-    using WikiExportParser.Wiki;
+﻿// -----------------------------------------------------------------------
+// <copyright file="ScanConjurateurCommand.cs" organization="Pathfinder-Fr">
+// Copyright (c) Pathfinder-fr. Tous droits reserves.
+// </copyright>
+// -----------------------------------------------------------------------
 
+using System;
+using System.Linq;
+using WikiExportParser.Wiki;
+
+namespace WikiExportParser.Commands
+{
     /// <summary>
     /// Commande temporaire utilisée pour vérifier toutes les pages qui pointent vers la page du conjurateur.
     /// </summary>

@@ -1,9 +1,15 @@
-﻿namespace WikiExportParser.Writers
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
+﻿// -----------------------------------------------------------------------
+// <copyright file="EnumerableExtensions.cs" organization="Pathfinder-Fr">
+// Copyright (c) Pathfinder-fr. Tous droits reserves.
+// </copyright>
+// -----------------------------------------------------------------------
 
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace WikiExportParser.Writers
+{
     internal static class EumerableExtensions
     {
         public static K SelectOrDefault<T, K>(this T @this, Func<T, K> selector, K defaultValue = default(K))

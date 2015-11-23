@@ -4,15 +4,15 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
+using System.Linq;
+using PathfinderDb.Schema;
+
 namespace WikiExportParser.Wiki.Parsing
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Globalization;
-    using System.IO;
-    using System.Linq;
-    using PathfinderDb.Schema;
-
     public class MonsterGlossaryParser
     {
         private const string LeftAlignPrefix = "| CLASS=\"gauche\" |";
@@ -43,7 +43,7 @@ namespace WikiExportParser.Wiki.Parsing
                         // séparateur
                         if (entry != null)
                         {
-                            this.TryAdd(entry, monsters);
+                            TryAdd(entry, monsters);
                         }
 
                         entry = null;
@@ -89,20 +89,20 @@ namespace WikiExportParser.Wiki.Parsing
 
                             case 2:
                                 // Règles
-                                this.ReadRules(line, entry);
+                                ReadRules(line, entry);
                                 break;
 
                             case 3:
                                 // Livre
-                                this.ReadSourceBook(line, entry);
+                                ReadSourceBook(line, entry);
                                 break;
 
                             case 4:
-                                this.ReadFp(line, entry);
+                                ReadFp(line, entry);
                                 break;
 
                             default:
-                                this.log.Warning("Plus de 4 colonnes de contenu sur la ligne {0}", rowIndex);
+                                log.Warning("Plus de 4 colonnes de contenu sur la ligne {0}", rowIndex);
                                 break;
                         }
                     }
@@ -164,7 +164,7 @@ namespace WikiExportParser.Wiki.Parsing
                     break;
 
                 default:
-                    this.log.Warning("Règles {0} non supportées", line);
+                    log.Warning("Règles {0} non supportées", line);
                     break;
             }
         }
@@ -232,11 +232,11 @@ namespace WikiExportParser.Wiki.Parsing
             }
             else if (!string.IsNullOrEmpty(entry.FrenchLink))
             {
-                this.log.Warning("Impossible de trouver le monstre nommé \"{0}\" alors qu'il existe un lien vers la page wiki [[{1}]]", entry.FrenchName, entry.FrenchLink);
+                log.Warning("Impossible de trouver le monstre nommé \"{0}\" alors qu'il existe un lien vers la page wiki [[{1}]]", entry.FrenchName, entry.FrenchLink);
             }
-            else if(!string.IsNullOrEmpty(entry.FrenchName))
+            else if (!string.IsNullOrEmpty(entry.FrenchName))
             {
-                this.log.Information("Nouveau monstre à ajouter depuis le glossaire : \"{0}\"", entry.FrenchName);
+                log.Information("Nouveau monstre à ajouter depuis le glossaire : \"{0}\"", entry.FrenchName);
             }
         }
 
@@ -260,16 +260,16 @@ namespace WikiExportParser.Wiki.Parsing
             {
                 get
                 {
-                    var lower = (this.Source ?? string.Empty).ToLowerInvariant();
+                    var lower = (Source ?? string.Empty).ToLowerInvariant();
 
                     if (lower == "bestiary 4")
                     {
-                        return new ElementSource { Id = PathfinderDb.Schema.Source.Ids.Bestiary4 };
+                        return new ElementSource {Id = PathfinderDb.Schema.Source.Ids.Bestiary4};
                     }
 
                     if (lower.StartsWith("pf #"))
                     {
-                        return new ElementSource { Id = PathfinderDb.Schema.Source.Ids.AdventurePath(int.Parse(lower.Substring(4))) };
+                        return new ElementSource {Id = PathfinderDb.Schema.Source.Ids.AdventurePath(int.Parse(lower.Substring(4)))};
                     }
 
                     return null;

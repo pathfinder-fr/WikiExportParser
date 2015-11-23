@@ -1,9 +1,15 @@
-﻿namespace WikiExportParser.Wiki.Parsing.Spells
-{
-    using System;
-    using System.Text.RegularExpressions;
-    using PathfinderDb.Schema;
+﻿// -----------------------------------------------------------------------
+// <copyright file="SchoolParser.cs" organization="Pathfinder-Fr">
+// Copyright (c) Pathfinder-fr. Tous droits reserves.
+// </copyright>
+// -----------------------------------------------------------------------
 
+using System;
+using System.Text.RegularExpressions;
+using PathfinderDb.Schema;
+
+namespace WikiExportParser.Wiki.Parsing.Spells
+{
     internal static class SchoolParser
     {
         private const string UniversalSchoolPattern = "'''École''' Universel";

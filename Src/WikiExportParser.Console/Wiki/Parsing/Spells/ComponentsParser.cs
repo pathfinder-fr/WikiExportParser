@@ -1,11 +1,17 @@
-﻿namespace WikiExportParser.Wiki.Parsing.Spells
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text.RegularExpressions;
-    using PathfinderDb.Schema;
+﻿// -----------------------------------------------------------------------
+// <copyright file="ComponentsParser.cs" organization="Pathfinder-Fr">
+// Copyright (c) Pathfinder-fr. Tous droits reserves.
+// </copyright>
+// -----------------------------------------------------------------------
 
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text.RegularExpressions;
+using PathfinderDb.Schema;
+
+namespace WikiExportParser.Wiki.Parsing.Spells
+{
     internal static class ComponentsParser
     {
         private const string Pattern = @"'''Composantes''' \[\[COMPOSANTES\|(?<Value>[^\]]+)\]\](?<Comment>.+?)?(?:</?br/?>)";
@@ -14,7 +20,7 @@
 
         static ComponentsParser()
         {
-            foreach (var line in EmbeddedResources.LoadString("Resources.SpellNoRangeList.txt").Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries))
+            foreach (var line in EmbeddedResources.LoadString("Resources.SpellNoRangeList.txt").Split(new[] {Environment.NewLine}, StringSplitOptions.RemoveEmptyEntries))
             {
                 noComponentSpells.Add(line);
             }
@@ -22,7 +28,6 @@
 
         public static void ParseComponents(string html, Spell spell, ILog log)
         {
-
             var match = Regex.Match(html, Pattern, RegexOptions.CultureInvariant | RegexOptions.IgnoreCase);
 
             if (!match.Success)
@@ -31,11 +36,8 @@
                 {
                     throw new ParseException("Composantes introuvables");
                 }
-                else
-                {
-                    // composantes ignorée
-                    return;
-                }
+                // composantes ignorée
+                return;
             }
 
             spell.Components = new SpellComponents();

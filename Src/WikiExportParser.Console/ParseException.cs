@@ -1,7 +1,14 @@
-﻿namespace WikiExportParser
-{
-    using System;
+﻿// -----------------------------------------------------------------------
+// <copyright file="ParseException.cs" organization="Pathfinder-Fr">
+// Copyright (c) Pathfinder-fr. Tous droits reserves.
+// </copyright>
+// -----------------------------------------------------------------------
 
+using System;
+using System.Runtime.Serialization;
+
+namespace WikiExportParser
+{
     [Serializable]
     public class ParseException : ApplicationException
     {
@@ -19,7 +26,7 @@
         {
         }
 
-        protected ParseException(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context)
+        protected ParseException(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
         }

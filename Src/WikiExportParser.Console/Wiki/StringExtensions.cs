@@ -1,7 +1,13 @@
-﻿namespace WikiExportParser.Wiki
-{
-    using System;
+﻿// -----------------------------------------------------------------------
+// <copyright file="StringExtensions.cs" organization="Pathfinder-Fr">
+// Copyright (c) Pathfinder-fr. Tous droits reserves.
+// </copyright>
+// -----------------------------------------------------------------------
 
+using System;
+
+namespace WikiExportParser.Wiki
+{
     internal static class StringExtensions
     {
         public static bool StartsWithOrdinal(this string source, string value)

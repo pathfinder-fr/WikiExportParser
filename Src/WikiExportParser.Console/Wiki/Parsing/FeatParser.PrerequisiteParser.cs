@@ -1,11 +1,18 @@
-﻿namespace WikiExportParser.Wiki.Parsing
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text.RegularExpressions;
-    using PathfinderDb.Schema;
+﻿// -----------------------------------------------------------------------
+// <copyright file="FeatParser.PrerequisiteParser.cs" organization="Pathfinder-Fr">
+// Copyright (c) Pathfinder-fr. Tous droits reserves.
+// </copyright>
+// -----------------------------------------------------------------------
 
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text.RegularExpressions;
+using PathfinderDb.Schema;
+using WikiExportParser.Logging;
+
+namespace WikiExportParser.Wiki.Parsing
+{
     partial class FeatParser
     {
         private class PrerequisiteParser
@@ -18,12 +25,14 @@
 
             private const string BbaPattern = @"^(?:\[\[)?BBA(?:\|bonus de base à l[’']attaque)?(?:\]\])?\s(?:de\s)?\+(?<Value>\d+)$";
 
-            private static readonly string[] ClassLevelPatterns = new string[] {
+            private static readonly string[] ClassLevelPatterns =
+            {
                 @"^\[\[(?<Class>[^\]]+)\]\]\s(de\s)?(\[\[)?niveau(\]\])?\s(?<Level>\d+)$",
-                @"^\[\[(?<Class>[^\]]+)\]\] (?<Level>\d+)$",
+                @"^\[\[(?<Class>[^\]]+)\]\] (?<Level>\d+)$"
             };
 
-            private static readonly string[] SpellCasterLevelPatterns = new string[] {
+            private static readonly string[] SpellCasterLevelPatterns =
+            {
                 @"^lanceur de sorts (de )?niveau (?<Level>\d+)$",
                 @"^\[\[Niveau\]\] (?<Level>\d+) de \[\[NLS\|lanceur de sorts\]\]$",
                 @"^\[\[Niveau\]\] (?<Level>\d+) de \[\[Lancer des sorts#NLS\|lanceur de sorts\]\]$",
@@ -31,22 +40,25 @@
                 @"^capacité de lancer des sorts de (?<Level>\d+)<sup>(ème|er)</sup> niveau$"
             };
 
-            private static readonly string[] SkillRankLevelPatterns = new string[] {
+            private static readonly string[] SkillRankLevelPatterns =
+            {
                 @"^(?<Ranks>\d+) (?:\[\[)?rangs?(?:\]\])? en \[\[(?<Skill>[^\]]+)\]\]",
                 @"^\[\[(?<Skill>[^\]]+)\]\]\s(?<Ranks>\d+)\srangs?$",
                 @"^(?<Ranks>\d+) (?:\[\[)?rang\|rangs?(?:\]\])? en \[\[(?<Skill>[^\]]+)\]\]",
-                @"^\[\[(?<Skill>[^\]]+)\]\] \((?<Speciality>[^)]+)\) (?<Ranks>\d+) rangs$",
+                @"^\[\[(?<Skill>[^\]]+)\]\] \((?<Speciality>[^)]+)\) (?<Ranks>\d+) rangs$"
             };
 
-            private static readonly string[] ClassPowerPatterns = new[] {
+            private static readonly string[] ClassPowerPatterns =
+            {
                 @"^(pouvoir|capacité|aptitude) de classe (de\s)?\[\[([^|]+\|)?(?<Name>[^]]+)\]\]$"
             };
 
-            private static readonly string[] SpellCastPatterns = new[] {
-                @"^''" + MarkupUtil.LinkPattern + "''$",
+            private static readonly string[] SpellCastPatterns =
+            {
+                @"^''" + MarkupUtil.LinkPattern + "''$"
             };
 
-            private static HashSet<string> otherTypes = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            private static readonly HashSet<string> otherTypes = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
             private readonly ILog log;
 
@@ -55,12 +67,12 @@
             public PrerequisiteParser(WikiPage page, ILog log)
             {
                 this.page = page;
-                this.log = log ?? Logging.NullLog.Instance;
+                this.log = log ?? NullLog.Instance;
             }
 
             static PrerequisiteParser()
             {
-                foreach (var line in EmbeddedResources.LoadString("Resources.FeatPrerequisiteOtherTypes.txt").Split(new[] { Environment.NewLine }, StringSplitOptions.None))
+                foreach (var line in EmbeddedResources.LoadString("Resources.FeatPrerequisiteOtherTypes.txt").Split(new[] {Environment.NewLine}, StringSplitOptions.None))
                 {
                     otherTypes.Add(line);
                 }
@@ -81,29 +93,26 @@
                     prerequisite.Description = MarkupUtil.RemoveMarkup(markup);
                     return prerequisite;
                 }
-                else
+                // Condition composée (ou)
+                var choiceContainer = new FeatPrerequisiteChoice();
+
+                // Si les conditions étaient séparées par un ";", on découpe la chaîne selon "," et "ou"
+                // Si les conditions n'étaient pas séparées par un ";", on découpé la chaîne selon "ou" uniquement
+                var separators = hasSemiColons ? new[] {",", " ou "} : new[] {" ou "};
+
+                var choiceMarkup = markup.Split(separators, StringSplitOptions.RemoveEmptyEntries).Select(m => m.Trim()).ToArray();
+
+                var items = new List<FeatPrerequisite>(choiceMarkup.Length);
+                foreach (var itemMarkup in choiceMarkup)
                 {
-                    // Condition composée (ou)
-                    var choiceContainer = new FeatPrerequisiteChoice();
-
-                    // Si les conditions étaient séparées par un ";", on découpe la chaîne selon "," et "ou"
-                    // Si les conditions n'étaient pas séparées par un ";", on découpé la chaîne selon "ou" uniquement
-                    var separators = hasSemiColons ? new[] { ",", " ou " } : new[] { " ou " };
-
-                    var choiceMarkup = markup.Split(separators, StringSplitOptions.RemoveEmptyEntries).Select(m => m.Trim()).ToArray();
-
-                    var items = new List<FeatPrerequisite>(choiceMarkup.Length);
-                    foreach (var itemMarkup in choiceMarkup)
-                    {
-                        var item = CreateInstance(itemMarkup, export);
-                        item.Description = MarkupUtil.RemoveMarkup(itemMarkup);
-                        items.Add(item);
-                    }
-
-                    choiceContainer.Items = items.ToArray();
-
-                    return choiceContainer;
+                    var item = CreateInstance(itemMarkup, export);
+                    item.Description = MarkupUtil.RemoveMarkup(itemMarkup);
+                    items.Add(item);
                 }
+
+                choiceContainer.Items = items.ToArray();
+
+                return choiceContainer;
             }
 
             private FeatPrerequisite CreateInstance(string markup, WikiExport export)
@@ -131,8 +140,8 @@
                     var targetPage = export.FindPage(targetName);
                     if (targetPage == null)
                     {
-                        this.log.Warning("{0}: Impossible de trouver la page nommée '{1}' désignée par le lien '{2}'", this.page.Title, target, markup);
-                        return new FeatPrerequisite { Type = FeatPrerequisiteType.Other };
+                        log.Warning("{0}: Impossible de trouver la page nommée '{1}' désignée par le lien '{2}'", page.Title, target, markup);
+                        return new FeatPrerequisite {Type = FeatPrerequisiteType.Other};
                     }
 
                     string subValue;
@@ -141,15 +150,15 @@
 
                     if (targetType == FeatPrerequisiteType.Other)
                     {
-                        this.log.Warning(
+                        log.Warning(
                             "{3}: Impossible de déterminer le type de lien pour la page '{0}' désignée par le lien '{1}' avec les catégories '{2}'",
                             targetPage.Title,
                             markup,
                             string.Join(", ", targetPage.Categories.Select(c => c.Name)),
-                            this.page.Title
+                            page.Title
                             );
 
-                        return new FeatPrerequisite { Type = FeatPrerequisiteType.Other };
+                        return new FeatPrerequisite {Type = FeatPrerequisiteType.Other};
                     }
 
                     return new FeatPrerequisite
@@ -215,45 +224,45 @@
                     return new FeatPrerequisite
                     {
                         Type = FeatPrerequisiteType.SpellCast,
-                        Value = WikiName.IdFromTitle(MarkupUtil.ExtractLinkTargetName(match)),
+                        Value = WikiName.IdFromTitle(MarkupUtil.ExtractLinkTargetName(match))
                     };
                 }
 
                 if (otherTypes.Contains(markup))
                 {
-                    return new FeatPrerequisite { Type = FeatPrerequisiteType.Other };
+                    return new FeatPrerequisite {Type = FeatPrerequisiteType.Other};
                 }
 
                 switch (lower)
                 {
                     case "pouvoir de classe ancrage":
-                        return new FeatPrerequisite { Type = FeatPrerequisiteType.Other, OtherType = FeatPrerequisiteOtherTypes.ClassPower, Value = WikiName.IdFromTitle("Ancrage") };
+                        return new FeatPrerequisite {Type = FeatPrerequisiteType.Other, OtherType = FeatPrerequisiteOtherTypes.ClassPower, Value = WikiName.IdFromTitle("Ancrage")};
 
                     case "pouvoir de classe [[oracle#mystere|mystère]]":
-                        return new FeatPrerequisite { Type = FeatPrerequisiteType.Other, OtherType = FeatPrerequisiteOtherTypes.ClassPower, Value = WikiName.IdFromTitle("Mystère") };
+                        return new FeatPrerequisite {Type = FeatPrerequisiteType.Other, OtherType = FeatPrerequisiteOtherTypes.ClassPower, Value = WikiName.IdFromTitle("Mystère")};
 
                     case "[[maniement dune arme exotique|maniement d'une arme exotique]] (filet)":
-                        return new FeatPrerequisite { Type = FeatPrerequisiteType.Other, OtherType = FeatPrerequisiteOtherTypes.ExoticWeaponProficiency, Value = WikiName.IdFromTitle("filet") };
+                        return new FeatPrerequisite {Type = FeatPrerequisiteType.Other, OtherType = FeatPrerequisiteOtherTypes.ExoticWeaponProficiency, Value = WikiName.IdFromTitle("filet")};
 
                     case "[[arme de prédilection]] pour l’arme choisie":
-                        return new FeatPrerequisite { Type = FeatPrerequisiteType.Feat, Value = WikiName.IdFromTitle("arme de prédilection") };
+                        return new FeatPrerequisite {Type = FeatPrerequisiteType.Feat, Value = WikiName.IdFromTitle("arme de prédilection")};
 
                     case "[[arme de prédilection]] (bâton)":
-                        return new FeatPrerequisite { Type = FeatPrerequisiteType.Feat, Value = WikiName.IdFromTitle("arme de prédilection"), SubValue = WikiName.IdFromTitle("bâton") };
+                        return new FeatPrerequisite {Type = FeatPrerequisiteType.Feat, Value = WikiName.IdFromTitle("arme de prédilection"), SubValue = WikiName.IdFromTitle("bâton")};
 
                     case "aptitude de classe de [[représentation bardique]]":
-                        return new FeatPrerequisite { Type = FeatPrerequisiteType.Other, OtherType = FeatPrerequisiteOtherTypes.ClassPower, Value = WikiName.IdFromTitle("représentation bardique") };
+                        return new FeatPrerequisite {Type = FeatPrerequisiteType.Other, OtherType = FeatPrerequisiteOtherTypes.ClassPower, Value = WikiName.IdFromTitle("représentation bardique")};
 
                     case "capacité de classe de [[canalisation|canalisation d’énergie]]":
                     case "capacité de classe permettant de [[canalisation|canaliser de l’énergie négative]]":
                     case "capacité de [[classe]] à [[canalisation|canaliser de l’énergie]]":
                     case "capacité de [[classe]] permettant de [[canalisation|canaliser de l’énergie]]":
                     case "Capacité de classe permettant de canaliser de l’énergie":
-                        return new FeatPrerequisite { Type = FeatPrerequisiteType.Other, OtherType = FeatPrerequisiteOtherTypes.ClassPower, Value = WikiName.IdFromTitle("canalisation") };
+                        return new FeatPrerequisite {Type = FeatPrerequisiteType.Other, OtherType = FeatPrerequisiteOtherTypes.ClassPower, Value = WikiName.IdFromTitle("canalisation")};
                 }
 
-                this.log.Warning(string.Format("{1}: Condition '{0}' non reconnue", markup, this.page.Title));
-                return new FeatPrerequisite { Type = FeatPrerequisiteType.Other };
+                log.Warning(string.Format("{1}: Condition '{0}' non reconnue", markup, page.Title));
+                return new FeatPrerequisite {Type = FeatPrerequisiteType.Other};
             }
 
             private FeatPrerequisiteType ResolveTypeFromPageCategories(WikiPage page, out string subValue, out int number)

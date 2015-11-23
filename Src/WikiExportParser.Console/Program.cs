@@ -1,27 +1,34 @@
-﻿namespace WikiExportParser
-{
-    using PathfinderDb.Schema;
-    using System;
-    using System.Collections.Generic;
-    using System.IO;
-    using System.Linq;
-    using System.Xml.Serialization;
-    using WikiExportParser.Wiki;
+﻿// -----------------------------------------------------------------------
+// <copyright file="Program.cs" organization="Pathfinder-Fr">
+// Copyright (c) Pathfinder-fr. Tous droits reserves.
+// </copyright>
+// -----------------------------------------------------------------------
 
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using WikiExportParser.Commands;
+using WikiExportParser.Logging;
+using WikiExportParser.Wiki;
+using WikiExportParser.Writers;
+
+namespace WikiExportParser
+{
     internal class Program
     {
-        private static int FixedArgs = 3;
+        private static readonly int FixedArgs = 3;
 
-        private static List<Commands.ICommand> allCommands;
+        private static List<ICommand> allCommands;
 
         private static void Main(string[] args)
         {
-            Console.WriteLine("Pathfinder-fr Wiki Export Parser v{0}", typeof(Program).Assembly.GetName().Version);
+            Console.WriteLine("Pathfinder-fr Wiki Export Parser v{0}", typeof (Program).Assembly.GetName().Version);
 
-            allCommands = new List<Commands.ICommand>();
-            allCommands.AddRange(Commands.CommandLoader.LoadCommandFromAssemblyOf(typeof(Commands.ICommand)));
+            allCommands = new List<ICommand>();
+            allCommands.AddRange(CommandLoader.LoadCommandFromAssemblyOf(typeof (ICommand)));
 #if DEBUG
-            allCommands.AddRange(Commands.CommandLoader.LoadCommandFromAssemblyOf(typeof(Commands.ScanConjurateurCommand)));
+            allCommands.AddRange(CommandLoader.LoadCommandFromAssemblyOf(typeof (ScanConjurateurCommand)));
 #endif
 
             if (args == null || args.Length < FixedArgs || args.Any(x => x.Equals("/help", StringComparison.OrdinalIgnoreCase)))
@@ -79,9 +86,9 @@
             Console.WriteLine("Chargement de l'export wiki...");
             var export = new WikiExport();
             export.Load(xmlPath);
-            
-            ILog log = new Logging.ConsoleLog();
-            Logging.FileLog fileLog = null;
+
+            ILog log = new ConsoleLog();
+            FileLog fileLog = null;
 
             try
             {
@@ -91,8 +98,8 @@
                 string logFileName;
                 if (options.TryGetValue("log", out logFileName))
                 {
-                    fileLog = new Logging.FileLog(logFileName);
-                    log = new Logging.CombineLog(log, fileLog);
+                    fileLog = new FileLog(logFileName);
+                    log = new CombineLog(log, fileLog);
                 }
 
                 foreach (var command in commands)
@@ -110,10 +117,11 @@
                     Directory.CreateDirectory(directory);
                 }
 
-                var writers = new Writers.IDataSetWriter[] {
-                    new Writers.XmlDataSetWriter(),
-                    new Writers.JsonDataSetWriter(),
-                    new Writers.CsvDataSetWriter()
+                var writers = new IDataSetWriter[]
+                {
+                    new XmlDataSetWriter(),
+                    new JsonDataSetWriter(),
+                    new CsvDataSetWriter()
                 };
 
                 foreach (var dataSet in dataSets.DataSets)
@@ -123,7 +131,6 @@
                         writer.Write(dataSet.Key, dataSet.Value, xmlOut);
                     }
                 }
-
             }
             finally
             {
@@ -173,7 +180,6 @@
                         i += maxLineWidth;
                         Console.Write(new string(' ', maxAlias + 2));
                         Console.WriteLine(help.SafeSubstring(i, maxLineWidth));
-
                     } while (help.Length - i > maxLineWidth);
                 }
             }
@@ -181,12 +187,12 @@
             Console.WriteLine("Options disponibles :");
             Console.WriteLine();
             Console.WriteLine(" /log:[file]  Ecrit le journal de génération des données dans le fichier indiqué");
-            Console.WriteLine(" /csv         Génère les données au format CSV. Par défaut, les données ne sont générées qu'au format XML");  
+            Console.WriteLine(" /csv         Génère les données au format CSV. Par défaut, les données ne sont générées qu'au format XML");
         }
 
-        private static IEnumerable<Commands.ICommand> LoadCommands(IList<Commands.ICommand> allCommands, string commandName, IEnumerable<string> commandNames)
+        private static IEnumerable<ICommand> LoadCommands(IList<ICommand> allCommands, string commandName, IEnumerable<string> commandNames)
         {
-            var commands = new List<Commands.ICommand>();
+            var commands = new List<ICommand>();
 
             var command = allCommands.FirstOrDefault(c => c.Alias.Equals(commandName, StringComparison.OrdinalIgnoreCase));
             if (command != null)

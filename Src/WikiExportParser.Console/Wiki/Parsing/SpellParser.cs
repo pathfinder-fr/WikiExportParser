@@ -1,16 +1,20 @@
-﻿namespace WikiExportParser.Wiki.Parsing
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text.RegularExpressions;
-    using PathfinderDb.Schema;
-    using Spells;
+﻿// -----------------------------------------------------------------------
+// <copyright file="SpellParser.cs" organization="Pathfinder-Fr">
+// Copyright (c) Pathfinder-fr. Tous droits reserves.
+// </copyright>
+// -----------------------------------------------------------------------
 
+using System;
+using PathfinderDb.Schema;
+using WikiExportParser.Logging;
+using WikiExportParser.Wiki.Parsing.Spells;
+
+namespace WikiExportParser.Wiki.Parsing
+{
     /// <summary>
-    /// Décrypte et génère un sort <see cref="Spell"/> à partir d'une page extraite du wiki.
+    /// Décrypte et génère un sort <see cref="Spell" /> à partir d'une page extraite du wiki.
     /// </summary>
-    internal partial class SpellParser
+    internal class SpellParser
     {
         private readonly Spell spell;
 
@@ -41,23 +45,23 @@
 
         public void Execute(ILog log = null)
         {
-            this.log = log ?? Logging.NullLog.Instance;
+            this.log = log ?? NullLog.Instance;
 
-            SchoolParser.ParseSchool(this.html, this.spell, this.log);
-            DescriptorParser.ParseDescriptor(this.html, this.spell, this.log);
-            LevelsParser.ParseLevels(this.html, this.spell, this.log);
-            RangeParser.ParseRange(this.html, this.spell, this.log);
-            TargetParser.ParseTarget(this.html, this.spell, this.log);
-            ComponentsParser.ParseComponents(this.html, this.spell, this.log);
-            CastingTimeParser.ParseCastingTime(this.html, this.spell, this.log);
-            SavingThrowParser.ParseSavingThrow(this.html, this.spell, this.log);
-            MagicResistanceParser.ParseMagicResistance(this.html, this.spell, this.log);
-            this.ParseSource();
+            SchoolParser.ParseSchool(html, spell, this.log);
+            DescriptorParser.ParseDescriptor(html, spell, this.log);
+            LevelsParser.ParseLevels(html, spell, this.log);
+            RangeParser.ParseRange(html, spell, this.log);
+            TargetParser.ParseTarget(html, spell, this.log);
+            ComponentsParser.ParseComponents(html, spell, this.log);
+            CastingTimeParser.ParseCastingTime(html, spell, this.log);
+            SavingThrowParser.ParseSavingThrow(html, spell, this.log);
+            MagicResistanceParser.ParseMagicResistance(html, spell, this.log);
+            ParseSource();
         }
 
         public static void Flush(ILog log = null)
         {
-            log = log ?? Logging.NullLog.Instance;
+            log = log ?? NullLog.Instance;
 
             TargetParser.Flush(log);
         }
@@ -92,19 +96,19 @@
             var sourceId = MarkupUtil.DetectSourceSnippet(html);
 
             if (sourceId == null &&
-                (this.spell.Name.Equals("Brise", StringComparison.OrdinalIgnoreCase) ||
-                this.spell.Name.Equals("Choc", StringComparison.OrdinalIgnoreCase) ||
-                this.spell.Name.Equals("Détremper", StringComparison.OrdinalIgnoreCase) ||
-                this.spell.Name.Equals("Pénombre", StringComparison.OrdinalIgnoreCase) ||
-                this.spell.Name.Equals("Racine", StringComparison.OrdinalIgnoreCase) ||
-                this.spell.Name.Equals("Scoop", StringComparison.OrdinalIgnoreCase)
-                ))
+                (spell.Name.Equals("Brise", StringComparison.OrdinalIgnoreCase) ||
+                 spell.Name.Equals("Choc", StringComparison.OrdinalIgnoreCase) ||
+                 spell.Name.Equals("Détremper", StringComparison.OrdinalIgnoreCase) ||
+                 spell.Name.Equals("Pénombre", StringComparison.OrdinalIgnoreCase) ||
+                 spell.Name.Equals("Racine", StringComparison.OrdinalIgnoreCase) ||
+                 spell.Name.Equals("Scoop", StringComparison.OrdinalIgnoreCase)
+                    ))
             {
                 sourceId = Source.Ids.PaizoBlog;
-                spell.Source.References.Add(new ElementReference { HrefString = "http://www.black-book-editions.fr/index.php?site_id=59&download_id=138", Name = "Page téléchargement BBE" });
-                spell.Source.References.Add(new ElementReference { HrefString = "http://www.pathfinder-fr.org/Wiki/GetFile.aspx?File=%2fADJ%2fPathfinder-RPG%2fUMToursDeMagie.pdf", Name = "Téléchargement Pathfinder-fr.org" });
-                spell.Source.References.Add(new ElementReference { HrefString = "http://www.black-book-editions.fr/index.php?site_id=59&actu_id=398", Name = "Annonce BBE" });
-                spell.Source.References.Add(new ElementReference { HrefString = "http://www.pathfinder-fr.org/Blog/post/Un-coup-de-baguette-magique.aspx", Name = "Annonce Pathfinder-fr.org" });
+                spell.Source.References.Add(new ElementReference {HrefString = "http://www.black-book-editions.fr/index.php?site_id=59&download_id=138", Name = "Page téléchargement BBE"});
+                spell.Source.References.Add(new ElementReference {HrefString = "http://www.pathfinder-fr.org/Wiki/GetFile.aspx?File=%2fADJ%2fPathfinder-RPG%2fUMToursDeMagie.pdf", Name = "Téléchargement Pathfinder-fr.org"});
+                spell.Source.References.Add(new ElementReference {HrefString = "http://www.black-book-editions.fr/index.php?site_id=59&actu_id=398", Name = "Annonce BBE"});
+                spell.Source.References.Add(new ElementReference {HrefString = "http://www.pathfinder-fr.org/Blog/post/Un-coup-de-baguette-magique.aspx", Name = "Annonce Pathfinder-fr.org"});
             }
 
             if (sourceId != null)

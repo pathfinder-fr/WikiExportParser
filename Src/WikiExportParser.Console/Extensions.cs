@@ -1,7 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿// -----------------------------------------------------------------------
+// <copyright file="Extensions.cs" organization="Pathfinder-Fr">
+// Copyright (c) Pathfinder-fr. Tous droits reserves.
+// </copyright>
+// -----------------------------------------------------------------------
 
 namespace WikiExportParser
 {
@@ -13,10 +14,7 @@ namespace WikiExportParser
             {
                 return @this.Substring(index, length);
             }
-            else
-            {
-                return @this.Substring(index);
-            }
+            return @this.Substring(index);
         }
     }
 }

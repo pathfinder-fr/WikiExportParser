@@ -1,7 +1,13 @@
-﻿namespace WikiExportParser.Logging
-{
-    using System;
+﻿// -----------------------------------------------------------------------
+// <copyright file="ConsoleLog.cs" organization="Pathfinder-Fr">
+// Copyright (c) Pathfinder-fr. Tous droits reserves.
+// </copyright>
+// -----------------------------------------------------------------------
 
+using System;
+
+namespace WikiExportParser.Logging
+{
     public class ConsoleLog : ILog
     {
         public int ErrorCount { get; set; }
@@ -10,19 +16,19 @@
 
         public void Information(string message)
         {
-            this.Write(message, ConsoleColor.White);
+            Write(message, ConsoleColor.White);
         }
 
         public void Warning(string message)
         {
-            this.Write(message, ConsoleColor.Yellow);
-            this.WarningCount++;
+            Write(message, ConsoleColor.Yellow);
+            WarningCount++;
         }
 
         public void Error(string message)
         {
-            this.Write(message, ConsoleColor.Red);
-            this.ErrorCount++;
+            Write(message, ConsoleColor.Red);
+            ErrorCount++;
         }
 
         private void Write(string message, ConsoleColor color = ConsoleColor.White)

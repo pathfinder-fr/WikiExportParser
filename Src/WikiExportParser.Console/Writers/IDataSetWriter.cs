@@ -1,5 +1,11 @@
-﻿using PathfinderDb.Schema;
+﻿// -----------------------------------------------------------------------
+// <copyright file="IDataSetWriter.cs" organization="Pathfinder-Fr">
+// Copyright (c) Pathfinder-fr. Tous droits reserves.
+// </copyright>
+// -----------------------------------------------------------------------
+
 using System.Collections.Generic;
+using PathfinderDb.Schema;
 
 namespace WikiExportParser.Writers
 {

@@ -1,17 +1,23 @@
-﻿namespace WikiExportParser.Commands
-{
-    using System.IO;
-    using System;
-    using System.Linq;
-    using PathfinderDb.Schema;
-    using System.Text.RegularExpressions;
-    using WikiExportParser.Wiki;
+﻿// -----------------------------------------------------------------------
+// <copyright file="GenerateSpellGlossaryCommand.cs" organization="Pathfinder-Fr">
+// Copyright (c) Pathfinder-fr. Tous droits reserves.
+// </copyright>
+// -----------------------------------------------------------------------
 
+using System;
+using System.IO;
+using System.Linq;
+using PathfinderDb.Schema;
+
+namespace WikiExportParser.Commands
+{
     /// <summary>
-    /// Génère le contenu de la page du wiki du glossaire des sorts français anglais en se basant sur les informations de la base de données des sorts.
+    /// Génère le contenu de la page du wiki du glossaire des sorts français anglais en se basant sur les informations de la
+    /// base de données des sorts.
     /// </summary>
     /// <remarks>
-    /// Adresse de la page du wiki : <a href="http://www.pathfinder-fr.org/Wiki/Pathfinder-RPG.Glossaire%20des%20sorts.ashx">Glossaire des sorts</a>.
+    /// Adresse de la page du wiki :
+    /// <a href="http://www.pathfinder-fr.org/Wiki/Pathfinder-RPG.Glossaire%20des%20sorts.ashx">Glossaire des sorts</a>.
     /// </remarks>
     public class GenerateSpellGlossaryCommand : SpellCommandBase, ICommand
     {
@@ -31,11 +37,11 @@
 
         public void Execute(DataSetCollection dataSets)
         {
-            var spells = this.ReadSpells();
+            var spells = ReadSpells();
 
-            this.AddSpellLists(spells);
+            AddSpellLists(spells);
 
-            this.GenerateIds(spells);
+            GenerateIds(spells);
 
             // Génération page format wiki
             using (var writer = new StreamWriter("SpellGlossary.txt"))
@@ -80,7 +86,7 @@
                     var wikiUrl = spell.Source.References.First(r => r.Name == References.PathfinderFrWiki).HrefString;
                     writer.Write(" [[{0}|(lien)]]", wikiUrl.Substring(WikiUrlPrefix.Length, wikiUrl.Length - WikiUrlPrefix.Length - WikiUrlSuffix.Length));
                     writer.WriteLine();
-                    writer.WriteLine("| {0}", this.AsSchoolLabel(spell.School));
+                    writer.WriteLine("| {0}", AsSchoolLabel(spell.School));
 
                     // Niveaux
                     writer.Write("| {0} |", GetSpellListLevel(spell, SpellList.Ids.SorcererWizard));
@@ -110,22 +116,19 @@
             {
                 return 4;
             }
-            else if (sourceId == Source.Ids.UltimateMagic)
+            if (sourceId == Source.Ids.UltimateMagic)
             {
                 return 3;
             }
-            else if (sourceId == Source.Ids.AdvancedPlayerGuide)
+            if (sourceId == Source.Ids.AdvancedPlayerGuide)
             {
                 return 2;
             }
-            else if (sourceId == Source.Ids.PaizoBlog)
+            if (sourceId == Source.Ids.PaizoBlog)
             {
                 return 99;
             }
-            else
-            {
-                return 1;
-            }
+            return 1;
         }
 
         private static string GetLocalizedEntry(Spell spell, string language, string href, string defaultValue = null)
@@ -140,11 +143,16 @@
         {
             switch (spell.Source.Id)
             {
-                case Source.Ids.PathfinderRpg: return "PHB";
-                case Source.Ids.AdvancedPlayerGuide: return "APG";
-                case Source.Ids.UltimateMagic: return "UM";
-                case Source.Ids.UltimateCombat: return "UC";
-                default: return string.Empty;
+                case Source.Ids.PathfinderRpg:
+                    return "PHB";
+                case Source.Ids.AdvancedPlayerGuide:
+                    return "APG";
+                case Source.Ids.UltimateMagic:
+                    return "UM";
+                case Source.Ids.UltimateCombat:
+                    return "UC";
+                default:
+                    return string.Empty;
             }
         }
 
@@ -152,16 +160,26 @@
         {
             switch (school)
             {
-                case SpellSchool.Abjuration: return "Abj";
-                case SpellSchool.Conjuration: return "Inv";
-                case SpellSchool.Divination: return "Div";
-                case SpellSchool.Enchantment: return "Enc";
-                case SpellSchool.Evocation: return "Évo";
-                case SpellSchool.Illusion: return "Ill";
-                case SpellSchool.Necromancy: return "Nec";
-                case SpellSchool.Transmutation: return "Tra";
-                case SpellSchool.Universal: return "Uni";
-                default: throw new NotSupportedException(school.ToString());
+                case SpellSchool.Abjuration:
+                    return "Abj";
+                case SpellSchool.Conjuration:
+                    return "Inv";
+                case SpellSchool.Divination:
+                    return "Div";
+                case SpellSchool.Enchantment:
+                    return "Enc";
+                case SpellSchool.Evocation:
+                    return "Évo";
+                case SpellSchool.Illusion:
+                    return "Ill";
+                case SpellSchool.Necromancy:
+                    return "Nec";
+                case SpellSchool.Transmutation:
+                    return "Tra";
+                case SpellSchool.Universal:
+                    return "Uni";
+                default:
+                    throw new NotSupportedException(school.ToString());
             }
         }
 

@@ -1,7 +1,14 @@
-﻿namespace WikiExportParser.Wiki
-{
-    using System;
+﻿// -----------------------------------------------------------------------
+// <copyright file="WikiName.cs" organization="Pathfinder-Fr">
+// Copyright (c) Pathfinder-fr. Tous droits reserves.
+// </copyright>
+// -----------------------------------------------------------------------
 
+using System;
+using PathfinderDb.Schema;
+
+namespace WikiExportParser.Wiki
+{
     public class WikiName : IComparable<WikiName>
     {
         public const string DefaultNamespace = "Pathfinder-RPG";
@@ -15,14 +22,14 @@
             string name, @namespace;
             ParseFullName(fullName, out @namespace, out name);
 
-            this.Namespace = @namespace;
-            this.Name = name;
+            Namespace = @namespace;
+            Name = name;
         }
 
         public WikiName(string @namespace, string name)
         {
-            this.Namespace = @namespace.ToLowerInvariant();
-            this.Name = CleanName(name) ?? string.Empty;
+            Namespace = @namespace.ToLowerInvariant();
+            Name = CleanName(name) ?? string.Empty;
         }
 
         public string Namespace { get; set; }
@@ -35,20 +42,21 @@
         public string Id
         {
             get
-            { //return this.Name.ToLowerInvariant().Replace(",", string.Empty).Replace(' ', '-'); 
-                return PathfinderDb.Schema.Ids.Normalize(this.Name);
+            {
+                //return this.Name.ToLowerInvariant().Replace(",", string.Empty).Replace(' ', '-'); 
+                return Ids.Normalize(Name);
             }
         }
 
         public override string ToString()
         {
-            return string.Format("{0}.{1}", this.Namespace, this.Name);
+            return string.Format("{0}.{1}", Namespace, Name);
         }
 
         public static string IdFromTitle(string linkTitle)
         {
             //return linkTitle.ToLowerInvariant().Replace("\'", string.Empty).Replace("’", string.Empty).Replace(",", string.Empty).Replace(' ', '-');
-            return PathfinderDb.Schema.Ids.Normalize(linkTitle);
+            return Ids.Normalize(linkTitle);
         }
 
         public static WikiName FromLink(string linkText)
@@ -59,10 +67,7 @@
             {
                 return FromString(linkText.Substring(0, i));
             }
-            else
-            {
-                return FromString(linkText);
-            }
+            return FromString(linkText);
         }
 
         public static WikiName FromString(string fullName)
@@ -80,7 +85,7 @@
 
         public override int GetHashCode()
         {
-            return this.Name.ToLowerInvariant().GetHashCode() ^ this.Namespace.ToLowerInvariant().GetHashCode();
+            return Name.ToLowerInvariant().GetHashCode() ^ Namespace.ToLowerInvariant().GetHashCode();
         }
 
         public override bool Equals(object obj)
@@ -90,10 +95,10 @@
             if (other == null)
                 return base.Equals(obj);
 
-            if (object.ReferenceEquals(this, obj))
+            if (ReferenceEquals(this, obj))
                 return true;
 
-            return other.Name.Equals(this.Name, StringComparison.OrdinalIgnoreCase) && other.Namespace.Equals(this.Namespace, StringComparison.OrdinalIgnoreCase);
+            return other.Name.Equals(Name, StringComparison.OrdinalIgnoreCase) && other.Namespace.Equals(Namespace, StringComparison.OrdinalIgnoreCase);
         }
 
         public int CompareTo(WikiName other)
@@ -101,12 +106,12 @@
             if (other.Equals(this))
                 return 0;
 
-            var x = this.Namespace.CompareTo(other.Namespace);
+            var x = Namespace.CompareTo(other.Namespace);
 
             if (x != 0)
                 return x;
 
-            return this.Name.CompareTo(other.Name);
+            return Name.CompareTo(other.Name);
         }
 
         private static void ParseFullName(string fullName, out string @namespace, out string name)

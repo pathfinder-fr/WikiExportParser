@@ -1,8 +1,14 @@
-﻿namespace WikiExportParser.Wiki.Parsing.Spells
-{
-    using System.Text.RegularExpressions;
-    using PathfinderDb.Schema;
+﻿// -----------------------------------------------------------------------
+// <copyright file="CastingTimeParser.cs" organization="Pathfinder-Fr">
+// Copyright (c) Pathfinder-fr. Tous droits reserves.
+// </copyright>
+// -----------------------------------------------------------------------
 
+using System.Text.RegularExpressions;
+using PathfinderDb.Schema;
+
+namespace WikiExportParser.Wiki.Parsing.Spells
+{
     internal static class CastingTimeParser
     {
         private const string Pattern = "'''Temps d[’']incantation''' (?<Value>.*?)(?:</?br/?>)";
@@ -85,7 +91,6 @@
 
                 default:
                     throw new ParseException(string.Format("Unité de temps {0} inconnue", unit));
-
             }
         }
     }

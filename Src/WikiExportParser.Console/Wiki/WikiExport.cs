@@ -1,11 +1,17 @@
-﻿namespace WikiExportParser.Wiki
-{
-    using System;
-    using System.Collections.Generic;
-    using System.IO;
-    using System.Linq;
-    using System.Xml.Serialization;
+﻿// -----------------------------------------------------------------------
+// <copyright file="WikiExport.cs" organization="Pathfinder-Fr">
+// Copyright (c) Pathfinder-fr. Tous droits reserves.
+// </copyright>
+// -----------------------------------------------------------------------
 
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Xml.Serialization;
+
+namespace WikiExportParser.Wiki
+{
     public class WikiExport
     {
         private readonly WikiPageCollection pages;
@@ -16,22 +22,22 @@
 
         public WikiExport()
         {
-            this.pages = new WikiPageCollection(this);
+            pages = new WikiPageCollection(this);
         }
 
         public WikiPageCollection Pages
         {
-            get { return this.pages; }
+            get { return pages; }
         }
 
         public IEnumerable<WikiName> Categories
         {
-            get { return this.categories.Values; }
+            get { return categories.Values; }
         }
 
         public IDictionary<WikiName, WikiName> CategoriesIndex
         {
-            get { return this.categories; }
+            get { return categories; }
         }
 
         public WikiPage FindPage(WikiName name)
@@ -42,7 +48,7 @@
             int i = 0;
             while (i < 10)
             {
-                if (!this.pages.TryGet(name, out page))
+                if (!pages.TryGet(name, out page))
                 {
                     if (!this.links.TryGetValue(name, out links))
                     {
@@ -80,7 +86,7 @@
 
         public void Load(string path)
         {
-            var serializer = new XmlSerializer(typeof(XmlWikiPage));
+            var serializer = new XmlSerializer(typeof (XmlWikiPage));
 
             foreach (var subDir in Directory.GetDirectories(path))
             {
@@ -90,7 +96,7 @@
                     {
                         try
                         {
-                            this.LoadPage(serializer, subDir, fileName);
+                            LoadPage(serializer, subDir, fileName);
                         }
                         catch (Exception ex)
                         {
@@ -107,7 +113,7 @@
             XmlWikiPage xmlPage;
             using (var reader = new StreamReader(fileName))
             {
-                xmlPage = (XmlWikiPage)serializer.Deserialize(reader);
+                xmlPage = (XmlWikiPage) serializer.Deserialize(reader);
                 xmlPage.FileName = fileName;
             }
 
@@ -136,10 +142,10 @@
             ICollection<WikiName> targets;
             foreach (var linkName in xmlPage.InLinksNames)
             {
-                if (!this.links.TryGetValue(linkName, out targets))
+                if (!links.TryGetValue(linkName, out targets))
                 {
                     targets = new HashSet<WikiName>();
-                    this.links[linkName] = targets;
+                    links[linkName] = targets;
                 }
 
                 if (!targets.Contains(name))
@@ -149,10 +155,10 @@
             }
 
             // Chargement liens sortants
-            if (!this.links.TryGetValue(name, out targets))
+            if (!links.TryGetValue(name, out targets))
             {
                 targets = new HashSet<WikiName>();
-                this.links[name] = targets;
+                links[name] = targets;
             }
 
             foreach (var linkName in xmlPage.OutLinksNames)

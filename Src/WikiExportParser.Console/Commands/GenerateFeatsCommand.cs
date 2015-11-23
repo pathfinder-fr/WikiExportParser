@@ -1,18 +1,25 @@
-﻿namespace WikiExportParser.Commands
-{
-    using PathfinderDb.Schema;
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using WikiExportParser.Wiki;
-    using WikiExportParser.Wiki.Parsing;
+﻿// -----------------------------------------------------------------------
+// <copyright file="GenerateFeatsCommand.cs" organization="Pathfinder-Fr">
+// Copyright (c) Pathfinder-fr. Tous droits reserves.
+// </copyright>
+// -----------------------------------------------------------------------
 
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using PathfinderDb.Schema;
+using WikiExportParser.Wiki;
+using WikiExportParser.Wiki.Parsing;
+
+namespace WikiExportParser.Commands
+{
     public class GenerateFeatsCommand : ICommand
     {
         /// <summary>
         /// Liste des pages de la catégorie don à ignorer.
         /// </summary>
-        private static readonly string[] IgnoredPages = new[] {
+        private static readonly string[] IgnoredPages =
+        {
             "Les dons",
             "Tableau récapitulatif des dons",
             "Dons d'audace",
@@ -36,7 +43,7 @@
             "dons d'équipe",
             "dons raciaux",
             "dons relatifs aux compétences",
-            "tableau récapitulatif des dons (art de la guerre)",
+            "tableau récapitulatif des dons (art de la guerre)"
         };
 
         public WikiExport Wiki { get; set; }
@@ -55,7 +62,7 @@
 
         public void Execute(DataSetCollection dataSets)
         {
-            var export = this.Wiki;
+            var export = Wiki;
 
             var featPages = export.Pages
                 // Toutes les pages ayant la catégorie "Don"
@@ -64,15 +71,15 @@
                 .Where(p => !IgnoredPages.Any(i => i.Equals(p.Title, StringComparison.OrdinalIgnoreCase)))
                 .ToList();
 
-            this.Log.Information("{0} Dons chargés", featPages.Count);
+            Log.Information("{0} Dons chargés", featPages.Count);
 
-            var feats = this.ReadFeats(featPages);
+            var feats = ReadFeats(featPages);
 
             // Feats by source
             foreach (var sourceFeats in feats.GroupBy(s => s.Source.Id).Where(s => !string.IsNullOrEmpty(s.Key)))
             {
                 var dataSet = dataSets.ResolveDataSet(sourceFeats.Key);
-                dataSet.Sources.GetOrAdd(s => s.Id.Equals(sourceFeats.Key), () => new Source { Id = sourceFeats.Key });
+                dataSet.Sources.GetOrAdd(s => s.Id.Equals(sourceFeats.Key), () => new Source {Id = sourceFeats.Key});
                 dataSet.Feats.AddRange(sourceFeats);
             }
 
@@ -92,7 +99,7 @@
             foreach (var featPage in pages)
             {
                 Feat feat;
-                if (FeatParser.TryParse(featPage, this.Wiki, out feat, this.Log))
+                if (FeatParser.TryParse(featPage, Wiki, out feat, Log))
                 {
                     feats.Add(feat);
                 }

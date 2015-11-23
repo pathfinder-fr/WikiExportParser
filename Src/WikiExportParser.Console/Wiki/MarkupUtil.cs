@@ -1,9 +1,15 @@
-﻿namespace WikiExportParser.Wiki
-{
-    using System;
-    using System.Text.RegularExpressions;
-    using PathfinderDb.Schema;
+﻿// -----------------------------------------------------------------------
+// <copyright file="MarkupUtil.cs" organization="Pathfinder-Fr">
+// Copyright (c) Pathfinder-fr. Tous droits reserves.
+// </copyright>
+// -----------------------------------------------------------------------
 
+using System;
+using System.Text.RegularExpressions;
+using PathfinderDb.Schema;
+
+namespace WikiExportParser.Wiki
+{
     public static class MarkupUtil
     {
         public const string LinkPattern = @"\[\[(?<Name>[^|#\]]+)(?<Anchor>#[^|\]]+)?(\|(?<Title>[^\]]+))?\]\]";
@@ -33,12 +39,12 @@
 
             return html;
         }
-        
+
         public static string RemoveMarkup(string markup)
         {
             // Remplace les liens
             markup = Regex.Replace(markup, LinkPattern, ExtractLinkTitle, RegexOptions.CultureInvariant);
-            
+
             // Supprime les ''', ''
             markup = Regex.Replace(markup, "'{2,3}", string.Empty);
 
@@ -70,10 +76,7 @@
             {
                 return string.Format("href=\"pf://{0}#{1}\"", page, anchor);
             }
-            else
-            {
-                return string.Format("href=\"pf://{0}\"", page);
-            }
+            return string.Format("href=\"pf://{0}\"", page);
         }
     }
 }

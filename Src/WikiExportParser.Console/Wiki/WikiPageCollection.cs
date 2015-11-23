@@ -1,7 +1,14 @@
-﻿namespace WikiExportParser.Wiki
-{
-    using System.Collections.Generic;
+﻿// -----------------------------------------------------------------------
+// <copyright file="WikiPageCollection.cs" organization="Pathfinder-Fr">
+// Copyright (c) Pathfinder-fr. Tous droits reserves.
+// </copyright>
+// -----------------------------------------------------------------------
 
+using System.Collections;
+using System.Collections.Generic;
+
+namespace WikiExportParser.Wiki
+{
     public class WikiPageCollection : IEnumerable<WikiPage>
     {
         private readonly Dictionary<WikiName, WikiPage> pages = new Dictionary<WikiName, WikiPage>();
@@ -15,30 +22,30 @@
 
         internal void Add(WikiName name, WikiPage page)
         {
-            this.pages.Add(name, page);
+            pages.Add(name, page);
         }
 
         public WikiPage this[WikiName name]
         {
-            get { return this.pages[name]; }
+            get { return pages[name]; }
         }
 
         public int Count
         {
-            get { return this.pages.Count; }
+            get { return pages.Count; }
         }
 
         public bool TryGet(WikiName name, out WikiPage page)
         {
-            return this.pages.TryGetValue(name, out page);
+            return pages.TryGetValue(name, out page);
         }
 
         public WikiPage GetOrEmpty(WikiName name)
         {
             WikiPage page;
-            if (!this.pages.TryGetValue(name, out page))
+            if (!pages.TryGetValue(name, out page))
             {
-                return new WikiPage(this.wiki, new XmlWikiPage { FullName = name.ToString(), Title = string.Format("Inconnue ({0})", name) });
+                return new WikiPage(wiki, new XmlWikiPage {FullName = name.ToString(), Title = string.Format("Inconnue ({0})", name)});
             }
 
             return page;
@@ -46,12 +53,12 @@
 
         public IEnumerator<WikiPage> GetEnumerator()
         {
-            return this.pages.Values.GetEnumerator();
+            return pages.Values.GetEnumerator();
         }
 
-        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+        IEnumerator IEnumerable.GetEnumerator()
         {
-            return this.GetEnumerator();
+            return GetEnumerator();
         }
     }
 }

@@ -1,9 +1,14 @@
-﻿namespace WikiExportParser.Commands
-{
-    using PathfinderDb.Schema;
-    using System.Linq;
-    using WikiExportParser.Wiki;
+﻿// -----------------------------------------------------------------------
+// <copyright file="GenerateMagicItemsCommand.cs" organization="Pathfinder-Fr">
+// Copyright (c) Pathfinder-fr. Tous droits reserves.
+// </copyright>
+// -----------------------------------------------------------------------
 
+using System.Linq;
+using WikiExportParser.Wiki;
+
+namespace WikiExportParser.Commands
+{
     public class GenerateMagicItemsCommand : ICommand
     {
         public WikiExport Wiki { get; set; }
@@ -22,12 +27,13 @@
 
         public void Execute(DataSetCollection dataSets)
         {
-            var export = this.Wiki;
+            var export = Wiki;
 
             // Pages des listes d'objets
-            var objectLists = new[]{
+            var objectLists = new[]
+            {
                 "pathfinder-rpg.objets merveilleux",
-                "pathfinder-rpg.objets merveilleux apg",
+                "pathfinder-rpg.objets merveilleux apg"
             }.Select(pn => export.Pages[new WikiName(pn)]);
 
             // Liste des pages décrivant des objets magiques
@@ -35,7 +41,7 @@
                 .SelectMany(p => p.OutLinks)
                 .Distinct()
                 .ToList();
-            
+
             // Feats dataset
             //var ds = dataSets.ResolveDataSet("feats");
         }

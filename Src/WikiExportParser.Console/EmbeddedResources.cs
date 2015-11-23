@@ -1,9 +1,15 @@
-﻿namespace WikiExportParser
-{
-    using System;
-    using System.Collections.Generic;
-    using System.IO;
+﻿// -----------------------------------------------------------------------
+// <copyright file="EmbeddedResources.cs" organization="Pathfinder-Fr">
+// Copyright (c) Pathfinder-fr. Tous droits reserves.
+// </copyright>
+// -----------------------------------------------------------------------
 
+using System;
+using System.Collections.Generic;
+using System.IO;
+
+namespace WikiExportParser
+{
     /// <summary>
     /// Permet d'accéder aux ressources incorporées stockées au sein de l'assembly.
     /// </summary>
@@ -25,7 +31,7 @@
 
             if (!stringCache.TryGetValue(fullName, out result))
             {
-                var type = typeof(EmbeddedResources);
+                var type = typeof (EmbeddedResources);
 
                 using (var stream = type.Assembly.GetManifestResourceStream(type.Namespace + "." + fullName))
                 {

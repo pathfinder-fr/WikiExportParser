@@ -1,8 +1,15 @@
-﻿namespace WikiExportParser
-{
-    using System.Text.RegularExpressions;
-    using PathfinderDb.Schema;
+﻿// -----------------------------------------------------------------------
+// <copyright file="PrdUtils.cs" organization="Pathfinder-Fr">
+// Copyright (c) Pathfinder-fr. Tous droits reserves.
+// </copyright>
+// -----------------------------------------------------------------------
 
+using System.Globalization;
+using System.Text.RegularExpressions;
+using PathfinderDb.Schema;
+
+namespace WikiExportParser
+{
     internal static class PrdUtils
     {
         private const string PrdUrlFormat = "http://paizo.com/pathfinderRPG/{0}/{1}.html#_{2}";
@@ -19,7 +26,7 @@
 
             pageName = Regex.Replace(pageName, " [IXV]+$", string.Empty, RegexOptions.CultureInvariant);
             pageName = pageName.ToLowerInvariant();
-            pageName = System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(pageName);
+            pageName = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(pageName);
             pageName = pageName.Replace(" ", string.Empty);
             pageName = char.ToLowerInvariant(pageName[0]) + pageName.Substring(1);
             pageName = pageName.Replace("'", string.Empty);
