@@ -33,7 +33,7 @@ namespace WikiExportParser.Wiki.Parsing.Spells
             {
                 if (!noRangeSpells.Contains(spell.Id))
                 {
-                    throw new ParseException("Portée introuvable");
+                    throw new ParseException($"Portée introuvable pour l'id {spell.Id}");
                 }
                 // portée ignorée
                 return;

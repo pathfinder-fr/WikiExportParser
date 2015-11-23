@@ -15,8 +15,6 @@ namespace WikiExportParser.Wiki.Parsing
 {
     internal class SpellListParser
     {
-        private const string LevelHeaderPattern = "^===(Sorts|Formules).*(niveau (?<Level>\\d+)|de (?<Level>\\d+)(er|e) niveau)( \\((tours de magie|oraisons)\\))?===$";
-
         private const string SpellPattern = @"^\* '''''\[\[?(?<Name>[^\]]+)\]\]?( \((?<Components>[MFX])(, (?<Components>[MFX]))*\))?( \((?<APG>APG)\))?[\.]?'''''\s*(\((?<Components>[MFX])(, (?<Components>[MFX]))*\))?(?<APG>'''\(APG\)''')?\.?";
 
         private readonly ILog log;
@@ -59,7 +57,7 @@ namespace WikiExportParser.Wiki.Parsing
             Match match;
             if (line.StartsWith("===") && !line.StartsWith("===="))
             {
-                match = Regex.Match(line, "(niveau (?<Level>\\d+)|(?<Level>\\d+)(er|e) niveau)", RegexOptions.CultureInvariant | RegexOptions.ExplicitCapture);
+                match = Regex.Match(line, @"(niveau (?<Level>\d+)|(?<Level>\d+)(\<sup\>er\</sup\>|\<sup\>ème\</sup\>|er|e) niveau)", RegexOptions.CultureInvariant | RegexOptions.ExplicitCapture);
 
                 if (!match.Success)
                 {

@@ -121,7 +121,8 @@ namespace WikiExportParser
                 {
                     new XmlDataSetWriter(),
                     new JsonDataSetWriter(),
-                    new CsvDataSetWriter()
+                    new CsvDataSetWriter(),
+                    new XmlSingleDataSetWriter()
                 };
 
                 foreach (var dataSet in dataSets.DataSets)
@@ -190,7 +191,7 @@ namespace WikiExportParser
             Console.WriteLine(" /csv         Génère les données au format CSV. Par défaut, les données ne sont générées qu'au format XML");
         }
 
-        private static IEnumerable<ICommand> LoadCommands(IList<ICommand> allCommands, string commandName, IEnumerable<string> commandNames)
+        private static List<ICommand> LoadCommands(IList<ICommand> allCommands, string commandName, IEnumerable<string> commandNames)
         {
             var commands = new List<ICommand>();
 
@@ -206,7 +207,6 @@ namespace WikiExportParser
                 if (additionnalCommand != null)
                 {
                     commands.Add(additionnalCommand);
-                    //Console.WriteLine("Commande inconnue : {0}. Liste des commandes disponibles : {1}", additionnalCommandName, string.Join(", ", commands.Select(c => c.Alias)));
                 }
             }
 

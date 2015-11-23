@@ -16,7 +16,7 @@ namespace WikiExportParser.Wiki.Parsing.Spells
     {
         private static readonly List<string> noListSpells;
 
-        private static readonly Regex regex = new Regex(@"^\* '''''\[\[((?<Link>[^\|\]]+)\|)?(?<Title>[^\|\]]+)\]\]'{2,5}\s*(?<Foc>('')?\([MF]\)('')?\s*)?(''\((?:APG|AdM|Blog Paizo|UC)\)''\.?\s+)?(?<Foc>\(\s*[MF, ]+\)\s*)?\(\s*(\[\[[^\]]+\]\](,?\s*)?)*\s*\)\s*(?<Foc>\(\s*[MF, ]+\)\s*)?\. *(?<Desc>[^\r\n]*)", RegexOptions.CultureInvariant | RegexOptions.ExplicitCapture | RegexOptions.Multiline);
+        private static readonly Regex regex = new Regex(@"^\* '''''\[\[((?<Link>[^\|\]]+)\|)?(?<Title>[^\|\]]+)\]\]'{2,5}\s*(?<Foc>('')?\([MF]\)('')?\s*)?(''\((?:APG|AdM|Blog Paizo|UC|MR)\)''\.?\s+)?(?<Foc>\(\s*[MF, ]+\)\s*)?\(\s*(\[\[[^\]]+\]\](,?\s*)?)*\s*\)\s*(?<Foc>\(\s*[MF, ]+\)\s*)?\. *(?<Desc>[^\r\n]*)", RegexOptions.CultureInvariant | RegexOptions.ExplicitCapture | RegexOptions.Multiline);
 
         static DescriptionParser()
         {

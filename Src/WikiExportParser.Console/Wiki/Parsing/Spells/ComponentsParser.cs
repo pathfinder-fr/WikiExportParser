@@ -34,7 +34,7 @@ namespace WikiExportParser.Wiki.Parsing.Spells
             {
                 if (!noComponentSpells.Contains(spell.Id))
                 {
-                    throw new ParseException("Composantes introuvables");
+                    throw new ParseException($"Composantes introuvables pour l'id {spell.Id}");
                 }
                 // composantes ignorée
                 return;

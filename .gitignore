@@ -1,8 +1,15 @@
+# wiki files
+in/
+out/
+
+# build
 artifacts/
-packages/
 [bB]in
 [oO]bj
+build.log
+
+# visual studio
+packages/
+.vs/
 *.user
 *.suo
-build.log
-.vs/
