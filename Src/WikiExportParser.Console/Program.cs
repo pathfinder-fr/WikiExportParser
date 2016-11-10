@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using PathfinderDb.Schema;
 using WikiExportParser.Commands;
 using WikiExportParser.Logging;
 using WikiExportParser.Wiki;
@@ -125,11 +126,31 @@ namespace WikiExportParser
                     new XmlSingleDataSetWriter()
                 };
 
-                foreach (var dataSet in dataSets.DataSets)
+                if (options.Any(o => string.Equals(o.Key, "unique", StringComparison.OrdinalIgnoreCase)))
                 {
-                    foreach (var writer in writers.Where(w => w.Accept(dataSet.Key, dataSet.Value, options)))
+                    // un seul fichier
+                    var mergedDataSet = new DataSet();
+                    foreach (var dataSet in dataSets.DataSets)
                     {
-                        writer.Write(dataSet.Key, dataSet.Value, xmlOut);
+                        mergedDataSet.Add(dataSet.Value);
+                    }
+
+                    foreach (var writer in writers.Where(w => w.Accept("", mergedDataSet, options)))
+                    {
+                        writer.Write("", mergedDataSet, xmlOut);
+                    }
+
+                }
+                else
+                {
+                    // un fichier par dataset
+
+                    foreach (var dataSet in dataSets.DataSets)
+                    {
+                        foreach (var writer in writers.Where(w => w.Accept(dataSet.Key, dataSet.Value, options)))
+                        {
+                            writer.Write(dataSet.Key, dataSet.Value, xmlOut);
+                        }
                     }
                 }
             }
@@ -189,6 +210,8 @@ namespace WikiExportParser
             Console.WriteLine();
             Console.WriteLine(" /log:[file]  Ecrit le journal de génération des données dans le fichier indiqué");
             Console.WriteLine(" /csv         Génère les données au format CSV. Par défaut, les données ne sont générées qu'au format XML");
+            Console.WriteLine(" /json        Génère les données au format JSON. Par défaut, les données ne sont générées qu'au format XML");
+            Console.WriteLine(" /unique      Génère un seul fichier par commande, plutôt que séparer les fichiers par supplément");
         }
 
         private static List<ICommand> LoadCommands(IList<ICommand> allCommands, string commandName, IEnumerable<string> commandNames)

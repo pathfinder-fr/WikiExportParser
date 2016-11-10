@@ -29,7 +29,12 @@ namespace WikiExportParser.Writers
 
         public void Write(string name, DataSet dataSet, string directory)
         {
-            var folder = Path.Combine(directory, name);
+            var folder = directory;
+            if (!string.IsNullOrEmpty(name))
+            {
+                folder = Path.Combine(directory, name);
+            }
+
             if (!Directory.Exists(folder))
             {
                 Directory.CreateDirectory(folder);
