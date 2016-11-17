@@ -14,9 +14,22 @@ namespace WikiExportParser.Wiki.Parsing.Spells
 {
     internal static class TargetParser
     {
-        private const string Pattern = @"'''(?<Type>(Cibles?|Effet|Zone d'effet|Zone|Cible ou zone d’effet|Cible et zone d’effet|Cible ou effet|Zone d'effet ou cible|Cible, effet ou zone d’effet))'''(?<Value>.+?)(?:</?br/?>)";
+        /// <summary>
+        /// Spells with no target.
+        /// </summary>
+        private static readonly HashSet<string> noTargetSpells = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+
+        private const string Pattern = @"'''(?<Type>(Cibles?|Effet|Zone d['’]effet|Zone|Cible ou zone d['’]effet|Cibles ou effet|Cible et zone d['’]effet|Cible ou effet|Zone d['’]effet ou cible|Cible, effet ou zone d['’]effet))'''(?<Value>.+?)(?:</?br/?>)";
 
         private static readonly IDictionary<string, int> typeCount = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
+
+        static TargetParser()
+        {
+            foreach (var line in EmbeddedResources.LoadString("Resources.SpellNoTargetList.txt").Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries))
+            {
+                noTargetSpells.Add(line);
+            }
+        }
 
         public static void ParseTarget(string html, Spell spell, ILog log)
         {
@@ -24,9 +37,14 @@ namespace WikiExportParser.Wiki.Parsing.Spells
 
             if (!match.Success)
             {
-                //log.Information("{0}: Pas de cible", spell.Name);
+                if (!noTargetSpells.Contains(spell.Id))
+                {
+                    log.Warning($"{spell.Name} : cible introuvable. Si le sort n'a pas de cible, il doit être ajouté dans le fichier contenant les sorts sans cible");
+                }
+
                 return;
             }
+
             var type = match.Groups["Type"].Value;
             int count;
             typeCount.TryGetValue(type, out count);

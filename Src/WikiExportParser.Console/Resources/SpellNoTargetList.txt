@@ -1,0 +1,3 @@
+﻿# liste des sorts connus n'ayant pas de cible
+création-de-demi-plan
+soin-infernal
