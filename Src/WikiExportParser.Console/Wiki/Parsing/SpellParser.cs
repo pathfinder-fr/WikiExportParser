@@ -78,14 +78,14 @@ namespace WikiExportParser.Wiki.Parsing
             // Ajout source drp
             spell.Source.References.Add(References.FromFrDrp(page.Id));
 
-            var html = page.Raw;
+            var wiki = page.Raw;
 
-            if (html.IndexOf("'''École'''", StringComparison.Ordinal) == -1 && html.IndexOf("'''Ecole'''", StringComparison.Ordinal) == -1)
+            if (wiki.IndexOf("'''École'''", StringComparison.Ordinal) == -1 && wiki.IndexOf("'''Ecole'''", StringComparison.Ordinal) == -1)
             {
                 throw new ParseException("École de magie introuvable");
             }
 
-            SpellParser parser = new SpellParser(spell, html);
+            SpellParser parser = new SpellParser(spell, wiki);
             parser.Execute(log);
 
             return spell;

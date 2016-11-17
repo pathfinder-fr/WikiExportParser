@@ -38,17 +38,17 @@ namespace WikiExportParser.Wiki.Parsing
             this.page = page;
             this.listName = listName;
 
-            log.Information("Début de l'analyse de la page \"{0}\"", this.page.Title);
+            this.log.Information("Début de l'analyse de la page \"{0}\"", this.page.Title);
 
             var wiki = this.page.Raw;
 
             var lines = wiki.Split(new[] {'\r', '\n'}, StringSplitOptions.RemoveEmptyEntries);
 
-            currentLevel = -1;
+            this.currentLevel = -1;
 
             foreach (var line in lines)
             {
-                ReadSpellLine(spells, line);
+                this.ReadSpellLine(spells, line);
             }
         }
 
@@ -61,11 +61,11 @@ namespace WikiExportParser.Wiki.Parsing
 
                 if (!match.Success)
                 {
-                    log.Warning("Niveau indétectable dans l'entête \"{0}\"", line);
+                    this.log.Warning("Niveau indétectable dans l'entête \"{0}\"", line);
                 }
                 else
                 {
-                    currentLevel = int.Parse(match.Groups["Level"].Value);
+                    this.currentLevel = int.Parse(match.Groups["Level"].Value);
                     //log.Information("Détection du début d'une liste de sort de niveau {0}", this.currentLevel);
                 }
                 return;
@@ -80,7 +80,7 @@ namespace WikiExportParser.Wiki.Parsing
 
             if (!match.Success)
             {
-                log.Warning("Sort introuvable sur la ligne \"{0}\"", line);
+                this.log.Warning("Sort introuvable sur la ligne \"{0}\"", line);
                 return;
             }
 
@@ -104,38 +104,38 @@ namespace WikiExportParser.Wiki.Parsing
             {
                 // On a pas trouvé de sort correspond à l'id désigné par le lien wiki
                 // On vérifie si la page existe
-                var page = wiki.FindPage(wikiName);
+                var page = this.wiki.FindPage(wikiName);
 
                 if (page == null)
                 {
                     // La page n'existe pas dans le wiki. Donc le lien est un lien wiki rouge (page non encore créée)
-                    log.Error("Le sort \"{0}\" pour l'id {1} ne désigne pas une page existante", name, spellPageId);
+                    this.log.Error("Le sort \"{0}\" pour l'id {1} ne désigne pas une page existante", name, spellPageId);
                 }
                 else
                 {
                     // La page existe. Il faut vérifier si elle est bien dans la liste spells, et si elle n'y est pas il faut savoir pourquoi
-                    log.Warning("La page \"{0}\" pour l'id {1} n'est pas répertoriée comme un sort", name, spellPageId);
+                    this.log.Warning("La page \"{0}\" pour l'id {1} n'est pas connue comme un sort", name, spellPageId);
                 }
                 return;
             }
 
-            var list = spell.Levels.FirstOrDefault(l => l.List == listName);
+            var list = spell.Levels.FirstOrDefault(l => l.List == this.listName);
 
-            if (listName == SpellList.Ids.Cleric && !spell.Levels.Any(l => l.List == SpellList.Ids.Oracle))
+            if (this.listName == SpellList.Ids.Cleric && spell.Levels.All(l => l.List != SpellList.Ids.Oracle))
             {
-                spell.Levels = spell.Levels.Concat(new[] {new SpellListLevel {List = SpellList.Ids.Oracle, Level = currentLevel}}).ToArray();
+                spell.Levels = spell.Levels.Concat(new[] {new SpellListLevel {List = SpellList.Ids.Oracle, Level = this.currentLevel}}).ToArray();
             }
 
             if (list == null)
             {
                 //log.Information("Ajout du sort {0} à la liste {1} {2}", spell.Name, this.listName, this.currentLevel);
-                spell.Levels = spell.Levels.Concat(new[] {new SpellListLevel {List = listName, Level = currentLevel}}).ToArray();
+                spell.Levels = spell.Levels.Concat(new[] {new SpellListLevel {List = this.listName, Level = this.currentLevel}}).ToArray();
             }
             else
             {
-                if (list.Level != currentLevel)
+                if (list.Level != this.currentLevel)
                 {
-                    log.Error("Erreur de niveau pour le sort \"{0}\" (liste niv. {1} et description niv. {2})", spell.Name, currentLevel, list.Level);
+                    this.log.Error("Erreur de niveau pour le sort \"{0}\" (liste niv. {1} et description niv. {2})", spell.Name, this.currentLevel, list.Level);
                 }
             }
         }

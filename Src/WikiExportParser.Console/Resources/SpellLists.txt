@@ -1,0 +1,13 @@
+﻿Pathfinder-RPG.liste des formules dalchimiste			alchemist
+Pathfinder-RPG.liste des sorts dantipaladin				antipaladin
+Pathfinder-RPG.liste des sorts de bardes				bard
+Pathfinder-RPG.liste des sorts de conjurateurs			summoner
+Pathfinder-RPG.liste des sorts de druides				druid
+Pathfinder-RPG.liste des sorts Densorceleursmagiciens	sorcerer-wizard
+Pathfinder-RPG.liste des sorts dinquisiteur				inquisitor
+Pathfinder-RPG.liste des sorts de magus					magus
+Pathfinder-RPG.liste des sorts de paladins				paladin
+Pathfinder-RPG.liste des sorts de prêtres				cleric
+Pathfinder-RPG.liste des sorts de rôdeurs				ranger
+Pathfinder-RPG.liste des sorts de sorcière				witch
+Pathfinder-RPG.liste des sorts de chaman				shaman

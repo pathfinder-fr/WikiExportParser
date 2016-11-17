@@ -37,33 +37,12 @@ namespace WikiExportParser.Commands
             }.Select(pn => wiki.Pages[pn]);
 
             // Liste des pages à ignorer
-            var blackList = new[]
-            {
-                "Pathfinder-RPG.liste des sorts",
-                "Pathfinder-RPG.liste des sorts (fin)",
-                "Pathfinder-RPG.liste des sorts (suite)",
-                "Pathfinder-RPG.liste des sorts dantipaladin",
-                "Pathfinder-RPG.liste des sorts dantipaladins",
-                "Pathfinder-RPG.liste des sorts de bardes",
-                "Pathfinder-RPG.liste des sorts de conjurateurs",
-                "Pathfinder-RPG.liste des sorts de druides",
-                "Pathfinder-RPG.liste des sorts Densorceleursmagiciens",
-                "Pathfinder-RPG.liste des sorts de magus",
-                "Pathfinder-RPG.liste des sorts de paladin",
-                "Pathfinder-RPG.liste des sorts de paladins",
-                "Pathfinder-RPG.liste des sorts de prêtres",
-                "Pathfinder-RPG.liste des sorts de rôdeur",
-                "Pathfinder-RPG.liste des sorts de rôdeurs",
-                "Pathfinder-RPG.liste des sorts de sorcière",
-                "Pathfinder-RPG.liste des sorts dinquisiteur",
-                "Pathfinder-RPG.liste des formules dalchimiste",
-                "Pathfinder-RPG.liste des sorts délémentaliste"
-            };
+            var blackList = EmbeddedResources.LoadString("Resources.SpellIgnoredPages.txt").Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
 
             var spellPages = spellLists
                 .SelectMany(p => p.OutLinks) // Liste des liens sortants
                 .Distinct()
-                .Where(p => !blackList.Any(blp => p.FullName.Equals(blp, StringComparison.OrdinalIgnoreCase)))
+                .Where(p => !blackList.Any(blp => p.Name.Equals(blp, StringComparison.OrdinalIgnoreCase)))
                 .ToList()
                 ;
 
@@ -101,23 +80,10 @@ namespace WikiExportParser.Commands
         protected void AddSpellLists(List<Spell> spells)
         {
             // Liste des listes de sort
-            var pagesNames = new Dictionary<string, string>
-            {
-                {"Pathfinder-RPG.liste des formules dalchimiste", SpellList.Ids.Alchemist},
-                {"Pathfinder-RPG.liste des sorts dantipaladin", SpellList.Ids.AntiPaladin},
-                {"Pathfinder-RPG.liste des sorts de bardes", SpellList.Ids.Bard},
-                {"Pathfinder-RPG.liste des sorts de conjurateurs", SpellList.Ids.Summoner},
-                {"Pathfinder-RPG.liste des sorts de druides", SpellList.Ids.Druid},
-                {"Pathfinder-RPG.liste des sorts Densorceleursmagiciens", SpellList.Ids.SorcererWizard},
-                {"Pathfinder-RPG.liste des sorts dinquisiteur", SpellList.Ids.Inquisitor},
-                // liste ignorée car correspond à des sorts bonus, et pas des sorts normaux
-                // { "Pathfinder-RPG.liste des sorts délémentaliste", SpellList.Ids.ElementalistWizard},
-                {"Pathfinder-RPG.liste des sorts de magus", SpellList.Ids.Magus},
-                {"Pathfinder-RPG.liste des sorts de paladins", SpellList.Ids.Paladin},
-                {"Pathfinder-RPG.liste des sorts de prêtres", SpellList.Ids.Cleric},
-                {"Pathfinder-RPG.liste des sorts de rôdeurs", SpellList.Ids.Ranger},
-                {"Pathfinder-RPG.liste des sorts de sorcière", SpellList.Ids.Witch}
-            };
+            var pagesNames = EmbeddedResources.LoadString("Resources.SpellLists.txt")
+                .Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries)
+                .Select(l => l.Split(new[] { '\t' }, StringSplitOptions.RemoveEmptyEntries))
+                .ToDictionary(l => l[0], l => l[1]);
 
             var spellListParser = new SpellListParser(Wiki, Log);
 

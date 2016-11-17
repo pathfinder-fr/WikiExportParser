@@ -210,6 +210,7 @@ namespace WikiExportParser.Wiki.Parsing.Spells
                 case "courte (7,50 m + 1,50 m/2 [[niveau|niveaux]]) (5 {s:c} + 1 {s:c}/2 [[niveau|niveaux]]) (voir description)":
                 case "[[présentation des sorts#portee|contact]] (voir description)": // Passage dans l'éther
                 case "0 m (voir description)": // Symbole de mort
+                case "3 m (voir description)": // Communication avec les apparitions
                 case "spéciale (voir description)": // Enchevetrement flamboyant & Flammes de la vengeance
                 //case "contact ; voir texte": // Lien sacré
                 //case "voir texte": // Vague mondiale
