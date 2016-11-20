@@ -177,14 +177,10 @@ namespace WikiExportParser.Wiki.Parsing.Spells
                         }
                         break;
                 }
-
-                if (copyValue)
-                {
-                    savingThrow.SpecificValue = value;
-                }
             }
             else if (compareValue.EqualsOrdinal("aucun") || compareValue.EqualsOrdinal("non"))
             {
+                savingThrow = null;
             }
             else if (compareValue.StartsWithOrdinal("aucun"))
             {
@@ -208,6 +204,11 @@ namespace WikiExportParser.Wiki.Parsing.Spells
             else
             {
                 throw new ParseException(string.Format("Impossible de décoder le type de jet de sauvegarde dans \"{0}\"", value));
+            }
+
+            if (copyValue)
+            {
+                savingThrow.SpecificValue = value;
             }
 
             spell.SavingThrow = savingThrow;
