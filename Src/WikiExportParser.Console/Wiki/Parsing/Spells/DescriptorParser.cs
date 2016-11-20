@@ -12,9 +12,9 @@ namespace WikiExportParser.Wiki.Parsing.Spells
 {
     internal static class DescriptorParser
     {
-        private const string DescriptorPattern = @"\(\[\[registre\|(?<Title>[^\]]+)\]\]\)";
+        private const string DescriptorPattern = @"\(\[\[(registre|Présentation des sorts#registre)\|(?<Title>[^\]]+)\]\]\)";
 
-        private const string DescriptorPattern2 = @"<nowiki>\[</nowiki>\[\[registre\|(?<Title>[^\]]+)\]\]<nowiki>\]</nowiki>";
+        private const string DescriptorPattern2 = @"<nowiki>\[</nowiki>\[\[(registre|Présentation des sorts#registre)\|(?<Title>[^\]]+)\]\]<nowiki>\]</nowiki>";
 
         public static void ParseDescriptor(string html, Spell spell, ILog log)
         {
