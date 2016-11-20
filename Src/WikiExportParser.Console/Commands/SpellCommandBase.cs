@@ -63,7 +63,7 @@ namespace WikiExportParser.Commands
                 }
             }
 
-            DescriptionParser.ParseDescriptions(spells, spellLists, new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase), Log);
+            //DescriptionParser.ParseDescriptions(spells, spellLists, new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase), Log);
 
             var consoleLog = Log as ConsoleLog;
             if (consoleLog != null)

@@ -227,7 +227,7 @@ namespace WikiExportParser.Wiki.Parsing.Spells
                 case "[[personnelle]] et [[présentation des sorts#portee|contact]]":
                 case "[[personnelle]] ou [[présentation des sorts#portee|contact]]": // Liberté de mouvement, orientation
                 case "9 ou 18 m": // Souffle de dragon
-                case "[[contact]] (voir description)":
+                case "[[contact]] (voir description)": // *
                 case "[[présentation des sorts#portee|contact]] ou 1,50 m (1 {s:c}) (voir description)": // Manteau de colère
                 case "[[contact]] ou 1,50 m (1 {s:c}) (voir description)": // Manteau de colère
                 case "[[personnelle]] et courte (7,50 m + 1,50 m/2 [[niveau|niveaux]]) (5 {s:c} + 1 {s:c}/2 [[niveau|niveaux]])": // Lien des esprits combatifs

@@ -15,7 +15,8 @@ namespace WikiExportParser.Wiki.Parsing
 {
     internal class SpellListParser
     {
-        private const string SpellPattern = @"^\* '''''\[\[?(?<Name>[^\]]+)\]\]?( \((?<Components>[MFX])(, (?<Components>[MFX]))*\))?( \((?<APG>APG)\))?[\.]?'''''\s*(\((?<Components>[MFX])(, (?<Components>[MFX]))*\))?(?<APG>'''\(APG\)''')?\.?";
+        //private const string SpellPattern = @"^\* '''''\[\[?(?<Name>[^\]]+)\]\]?( \((?<Components>[MFX])(, (?<Components>[MFX]))*\))?( \((?<APG>APG)\))?[\.]?'''''\s*(\((?<Components>[MFX])(, (?<Components>[MFX]))*\))?(?<APG>'''\(APG\)''')?\.?";
+        private const string SpellPattern = @"^\*\s*'*\[\[?(?<Name>[^\]]+)\]\]?'*(\s*'*\([AdMFX, ]+\)'*\s*)?\.?'*";
 
         private readonly ILog log;
 
@@ -84,10 +85,14 @@ namespace WikiExportParser.Wiki.Parsing
                 return;
             }
 
-            var isApg = match.Groups["APG"].Success;
+            //var isApg = match.Groups["APG"].Success;
             var name = match.Groups["Name"].Value;
-            var components = match.Groups["Component"].Value;
-            var description = line.Substring(match.Length).Trim();
+            //var components = match.Groups["Component"].Value;
+            //var description = line.Substring(match.Length).Trim();
+            if (name.IndexOf('|') != -1)
+            {
+                name = name.Substring(0, name.IndexOf('|'));
+            }
 
             var wikiName = WikiName.FromLink(name);
             if (string.IsNullOrWhiteSpace(wikiName.Namespace))

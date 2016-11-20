@@ -14,7 +14,7 @@ namespace WikiExportParser.Wiki.Parsing.Spells
     {
         private const string Pattern = @"'''Jet de sauvegarde'''(?<Value>[^;]+);";
 
-        private const string EffectPattern = @"^(?<Type>volonté|réflexes|vigueur|oui|non)(,|\s*pour)?(?<Value>[^;]+)$";
+        private const string EffectPattern = @"^(?<Type>volonté|réflexes|vigueur|oui|non)\s*(,|pour)?(?<Value>[^;]+)$";
 
         private const string BonusPattern = @"^(?<Effect>[^;]*?)(\s*\((?<Bonus>[^\);]+)\))*$";
 

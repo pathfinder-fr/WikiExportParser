@@ -70,6 +70,7 @@ namespace WikiExportParser.Wiki.Parsing.Spells
                         break;
 
                     case "m/fd":
+                    case "fd/m":
                         spell.Components.Kinds |= SpellComponentKinds.MaterialOrDivineFocus;
                         break;
 
