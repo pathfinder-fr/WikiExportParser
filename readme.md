@@ -44,3 +44,9 @@ Extrait et génère la base de données contenant l'ensemble des dons du wiki
 
 * `/csv` : demande la génération des données au format CSV. Par défaut, seul le format XML est généré.
 * `/log:fichier` : écrit le journal de génération dans le fichier indiqué en paramètre. exemple : `/log:spells.log`
+
+# Exemples
+
+Exporte l'ensemble des données dans tous les formats.
+
+> "bin\wikiexportparser.exe" In Out feats spells monsters /csv /json /log:all.log

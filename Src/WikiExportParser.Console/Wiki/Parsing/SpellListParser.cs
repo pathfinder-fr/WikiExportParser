@@ -119,7 +119,7 @@ namespace WikiExportParser.Wiki.Parsing
                 else
                 {
                     // La page existe. Il faut vérifier si elle est bien dans la liste spells, et si elle n'y est pas il faut savoir pourquoi
-                    this.log.Warning("La page \"{0}\" pour l'id {1} n'est pas connue comme un sort", name, spellPageId);
+                    this.log.Warning("La page \"{0}\" pour l'id {1} n'est pas connue comme un sort, il faut l'ajouter dans la liste alphabétique des sorts", name, spellPageId);
                 }
                 return;
             }

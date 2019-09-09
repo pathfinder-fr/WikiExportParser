@@ -17,11 +17,11 @@ namespace WikiExportParser.Writers
 {
     public class CsvDataSetWriter : IDataSetWriter
     {
-        private readonly CsvConfiguration config;
+        private readonly Configuration config;
 
         public CsvDataSetWriter()
         {
-            config = new CsvConfiguration
+            config = new Configuration
             {
                 CultureInfo = CultureInfo.InvariantCulture
             };

@@ -6,6 +6,7 @@
 
 using System;
 using System.IO;
+using System.Text;
 
 namespace WikiExportParser.Logging
 {
@@ -15,7 +16,7 @@ namespace WikiExportParser.Logging
 
         public FileLog(string path)
         {
-            writer = new StreamWriter(path);
+            writer = new StreamWriter(path, false, Encoding.Default);
         }
 
         ~FileLog()
